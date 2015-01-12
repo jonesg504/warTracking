@@ -1,21 +1,21 @@
 package warTracking;
 
 public class clanMath {
-	public void warContribution(Clan clan, Player player) {
-		
+	public double warContribution(Clan clan, Player player) {
+		int[] stats = clanStats(clan);
+		double perc = player.getStars() / stats[1];
+		return perc;
 	}
 	
-	public static void clanStats(Clan clan) {
+	public static int[] clanStats(Clan clan) {
+		int stars = 0;
+		int plays = 0;
 		for(Object play : clan) {
-			System.out.println(play);
-			
+			plays++;
+			stars += ((Player) play).getStars();
 		}
+		int[] returnVal = {plays, stars};
+		return returnVal;
 	}
-	public static void main(String[] args) {
-		/*Player p1 = new Player("Griffin", 3);
-		Player p2 = new Player("Jeffrey", 6);
-		Player[] players = {p1, p2};
-		Clan suns = new Clan(players);
-		clanStats(suns);*/
-	}
+	
 }
