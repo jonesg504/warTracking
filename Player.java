@@ -1,17 +1,24 @@
 package warTracking;
 
-import java.util.Iterator;
-
 public class Player{
 	private String name;
 	private int stars;
-	public Player (String name, int stars) {
+	private int thLevel;
+	public Player (String name, int stars, int thLevel) {
 		this.name = name;
 		this.stars = stars;
+		this.thLevel = thLevel;
 	}
-	public Player (String name) {
+	public Player (String name, int thLevel) {
 		this.name = name;
 		stars = 0;
+		this.thLevel = thLevel;
+	}
+	public int getThLevel() {
+		return thLevel;
+	}
+	public void setThLevel(int thLevel) {
+		this.thLevel = thLevel;
 	}
 	public String getName() {
 		return name;
