@@ -6,8 +6,11 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Button;
@@ -224,11 +227,41 @@ public class mainWindow extends JFrame {
 			if (gone == null) {
 				System.out.println ("Player Doesnt Exist");
 			} else {
-				System.out.println( "Removed: " + gone);
+				System.out.println( "Removed:\n" + gone);
 			}
 		}
 	}
-	private static void addPlayers(int num) {
+	private static void addPlayers() {
+		int num = Integer.parseInt(JOptionPane.showInputDialog("How many players are you removing?(Integer plz)"));
+		for(int i = 0; i < num; i++) {
+			final JTextField username = new JTextField(10);  
+			final JTextField thLevel = new JTextField(10); 
+	        final JPanel panel = new JPanel(new GridLayout(4,1));  
+	        panel.add(new JLabel("Username:"));  
+	        panel.add(username);  
+	        panel.add(new JLabel("Townhall Level:"));  
+	        panel.add(thLevel);
+	  
+	        Object[] options = { "OK", "Cancel" };          
+	        int result = JOptionPane.showOptionDialog(null, panel, "Data Entry", JOptionPane.OK_CANCEL_OPTION,   
+	                            JOptionPane.QUESTION_MESSAGE, null, options, null);  
+	          
+	        if (result == JOptionPane.OK_OPTION) {    
+	            clan.add(new Player(username.getText(), Integer.parseInt(thLevel.getText())));  
+	        } 
+			/*JTextField username = new JTextField();
+			JTextField thLevel = new JTextField();
+			Object[] message = {
+			    "Username:", username,
+			    "TownHall Level:", thLevel
+			};
+			int option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
+			
+			if (option == JOptionPane.OK_OPTION) {
+			   clan.add(new Player(username.getText(), Integer.parseInt(thLevel.getText())));
+			   System.out.println(clan);
+			}*/
+		}
 	}
 	//SWING ACTIONS
 	//--------------------------------------------------------------------------------------------------------------------------
@@ -265,6 +298,7 @@ public class mainWindow extends JFrame {
 			putValue(SHORT_DESCRIPTION, "Some short description");
 		}
 		public void actionPerformed(ActionEvent e) {
+			addPlayers();
 		}
 	}
 	private class SwingAction_4 extends AbstractAction {
