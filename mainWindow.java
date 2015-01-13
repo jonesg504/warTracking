@@ -1,23 +1,45 @@
 package warTracking;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.Button;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
+
 import java.awt.GridLayout;
+
 import javax.swing.JButton;
+
 import net.miginfocom.swing.MigLayout;
 
-public class mainWindow extends JFrame {
+import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+
+public class mainWindow extends JFrame {
+	private static JPanel panel_5 = new JPanel();
 	private JPanel contentPane;
+	private final Action action = new SwingAction();
+	private final Action action_1 = new SwingAction_1();
+	private final Action action_2 = new SwingAction_2();
+	private final Action action_3 = new SwingAction_3();
+	private final Action action_4 = new SwingAction_4();
+	private static Clan clan = new Clan();
 
 	/**
 	 * Launch the application.
@@ -25,9 +47,11 @@ public class mainWindow extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				createAndShowGui();
 				try {
 					mainWindow frame = new mainWindow();
 					frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -69,45 +93,188 @@ public class mainWindow extends JFrame {
 		contentPane.add(panel_1, BorderLayout.SOUTH);
 		
 		JButton btnNewButton = new JButton("New Player(s)");
+		btnNewButton.setAction(action_3);
 		panel_1.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Remove Player");
+		btnNewButton_1.setAction(action_4);
 		panel_1.add(btnNewButton_1);
 		
 		JPanel panel_2 = new JPanel();
 		contentPane.add(panel_2, BorderLayout.WEST);
 		panel_2.setLayout(new GridLayout(0, 1, 0, 0));
+		panel_2.setPreferredSize(new Dimension(100, 200));
 		
 		JTextArea txtrTopPlayers = new JTextArea();
-		txtrTopPlayers.setText("Top Players \n Griffin \n Your Mom");
+		txtrTopPlayers.setEditable(false);
+		txtrTopPlayers.setText("Top Players \r\n Griffin \r\n Your Mom");
 		panel_2.add(txtrTopPlayers);
 		
 		JTextArea txtrWorstPlayers = new JTextArea();
+		txtrWorstPlayers.setEditable(false);
 		txtrWorstPlayers.setText("Worst Players");
 		panel_2.add(txtrWorstPlayers);
 		
 		JPanel panel_3 = new JPanel();
 		contentPane.add(panel_3, BorderLayout.EAST);
+		panel_3.setPreferredSize(new Dimension(100, 200));
+		panel_3.setOpaque(true);
+	    panel_3.setBackground(Color.WHITE);
 		
 		JTextArea txtrHellosdfbasjd = new JTextArea();
-		txtrHellosdfbasjd.setText("Recent Stats");
+		txtrHellosdfbasjd.setEditable(false);
 		panel_3.add(txtrHellosdfbasjd);
 		
 		JPanel panel_4 = new JPanel();
 		contentPane.add(panel_4, BorderLayout.CENTER);
-		panel_4.setLayout(new MigLayout("", "[][][][][grow][][][][]", "[][][][][][grow][][][][][][]"));
+		panel_4.setLayout(null);
 		
-		JPanel panel_5 = new JPanel();
-		panel_4.add(panel_5, "cell 1 1 7 5,grow");
-		
-		JButton btnNewButton_2 = new JButton("New button");
-		panel_4.add(btnNewButton_2, "cell 1 11");
+		JButton btnNewButton_2 = new JButton("War Performance");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton_2.setAction(action);
+		btnNewButton_2.setBounds(10, 315, 132, 23);
+		panel_4.add(btnNewButton_2);
 		
 		JButton btnNewButton_3 = new JButton("New button");
-		panel_4.add(btnNewButton_3, "cell 3 11 3 1");
+		btnNewButton_3.setAction(action_1);
+		btnNewButton_3.setBounds(152, 315, 145, 23);
+		panel_4.add(btnNewButton_3);
 		
 		JButton btnNewButton_4 = new JButton("New button");
-		panel_4.add(btnNewButton_4, "cell 6 11");
+		btnNewButton_4.setAction(action_2);
+		btnNewButton_4.setBounds(307, 315, 137, 23);
+		panel_4.add(btnNewButton_4);
+		
+		
+		panel_5.setBounds(10, 10, 434,293);
+		panel_4.add(panel_5);
 	}
-
+	private static void createAndShowGui() {
+        List<Double> scores = new ArrayList<>();
+        Random random = new Random();
+        int maxDataPoints = 10;
+        int maxScore = 10;
+        for (int i = 0; i < maxDataPoints; i++) {
+          //  scores.add((double) random.nextDouble() * maxScore);
+            scores.add((double) i);
+        }
+        GraphPanel mainPanel = new GraphPanel(scores);
+        mainPanel.setPreferredSize(new Dimension(450, 300));
+        panel_5.add(mainPanel);
+        //JFrame frame = new JFrame("DrawGraph");
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //frame.getContentPane().add(mainPanel);
+        //frame.pack();
+        //frame.setLocationRelativeTo(null);
+        //frame.setVisible(true);
+    }
+	
+	private static void editGraph(int choice) {
+		List<Double> scores = new ArrayList<>();
+        Random random = new Random();
+        if (choice == 1) {
+        	int maxDataPoints = 13;
+            int maxScore = 45;
+            for (int i = 1; i <= maxDataPoints; i++) {
+                //scores.add((double) random.nextDouble() * maxScore);
+                scores.add((double) i);
+            }
+            GraphPanel mainPanel = new GraphPanel(scores);
+            mainPanel.setPreferredSize(new Dimension(450,300));
+            panel_5.remove(0);
+            panel_5.add(mainPanel);
+            panel_5.repaint();
+            panel_5.validate();
+        } else if (choice == 2) {
+        	int maxDataPoints = 13;
+            int maxScore = 45;
+            for (int i = 1; i <= maxDataPoints; i++) {
+                //scores.add((double) random.nextDouble() * maxScore);
+                scores.add((double) i/2);
+            }
+            GraphPanel mainPanel = new GraphPanel(scores);
+            mainPanel.setPreferredSize(new Dimension(450,300));
+            panel_5.remove(0);
+            panel_5.add(mainPanel);
+            panel_5.repaint();
+            panel_5.validate();
+        } else if (choice == 3) {
+        	int maxDataPoints = 13;
+            int maxScore = 45;
+            for (int i = 1; i <= maxDataPoints; i++) {
+                scores.add((double) random.nextDouble() * maxScore);
+                //scores.add((double) i);
+            }
+            GraphPanel mainPanel = new GraphPanel(scores);
+            mainPanel.setPreferredSize(new Dimension(450,300));
+            panel_5.remove(0);
+            panel_5.add(mainPanel);
+            panel_5.repaint();
+            panel_5.validate();
+        }
+	}
+	private static void removePlayers() {
+		int num = Integer.parseInt(JOptionPane.showInputDialog("How many players are you removing?(Integer plz)"));
+		for (int i = 0; i < num; i++) {
+			String removed = JOptionPane.showInputDialog("Enter Name:");
+			Player gone = clan.remove(new Player(removed));
+			if (gone == null) {
+				System.out.println ("Player Doesnt Exist");
+			} else {
+				System.out.println( "Removed: " + gone);
+			}
+		}
+	}
+	private static void addPlayers(int num) {
+	}
+	//SWING ACTIONS
+	//--------------------------------------------------------------------------------------------------------------------------
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "Performance");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			editGraph(1);
+		}
+	}
+	private class SwingAction_1 extends AbstractAction {
+		public SwingAction_1() {
+			putValue(NAME, "Participation");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			editGraph(2);
+		}
+	}
+	private class SwingAction_2 extends AbstractAction {
+		public SwingAction_2() {
+			putValue(NAME, "Attacks Lost");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			editGraph(3);
+		}
+	}
+	private class SwingAction_3 extends AbstractAction {
+		public SwingAction_3() {
+			putValue(NAME, "New Player(s)");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	private class SwingAction_4 extends AbstractAction {
+		public SwingAction_4() {
+			putValue(NAME, "Remove Player(s)");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			JOptionPane pane = new JOptionPane();
+			removePlayers();
+		}
+	}
 }

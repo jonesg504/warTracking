@@ -14,6 +14,11 @@ public class Player{
 		stars = 0;
 		this.thLevel = thLevel;
 	}
+	public Player (String name) {
+		this.name = name;
+		stars = 0;
+		this.thLevel = thLevel;
+	}
 	public int getThLevel() {
 		return thLevel;
 	}
@@ -34,6 +39,15 @@ public class Player{
 	}
 	public String toString() {
 		return "Name: " + name + "\nStars: " + stars + "\n";
+	}
+	public boolean equals(Object other) {
+		Player playa = (Player) other;
+		if(this.name == playa.name) {
+			return true;
+		}
+		
+		
+		return false;
 	}
 	
 	

@@ -1,18 +1,19 @@
 package warTracking;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Clan implements Iterable{
-	private Player[] players = new Player[50];
-	public Clan(Player[] players) {
+	private ArrayList<Player> players = new ArrayList(50);
+	public Clan(Player... players) {
 		for(int i = 0; i < players.length; i++) {
-			this.players[i] = players[i];
+			this.players.add(players[i]);
 		}
 	}
 	public String toString() {
 		String clanString = "";
-		for (int i = 0; i < players.length; i++) {
-			clanString = clanString + players[i].toString();
+		for (int i = 0; i < players.size(); i++) {
+			clanString = clanString + players.get(i).toString();
 		}
 		return clanString;
 	}
@@ -22,6 +23,15 @@ public class Clan implements Iterable{
 				return play;
 			}
 		}
+		return null;
+	}
+	public Player remove(Player player) {
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i).equals(player)) {
+				return players.remove(i);
+			}
+		}
+		
 		return null;
 	}
 	
@@ -34,14 +44,14 @@ public class Clan implements Iterable{
 		int current = 0;
 		
 		public boolean hasNext() {
-			return (current < 49 && players[current] != null);
+			return (current < 49 && players.get(current) != null);
 		}
 
 		@Override
 		public Player next() {
 			Player returnVal = null;
 			if(hasNext()) {
-				returnVal = players[current];
+				returnVal = players.get(current);
 				current++;
 				return returnVal;
 			} else {
