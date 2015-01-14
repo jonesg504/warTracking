@@ -42,6 +42,12 @@ public class war extends Clan {
 		player.addWorth(worth);
 		return worth;
 	}
+	private void saveAttack(ArrayList<String> saveList, int warNum) {
+		
+		
+		
+		
+	}
 	public double defense(Player player, Player opponent, int starsAdded) {
 		double multiplier = Math.pow(2, -starsAdded);
 		double worth = Math.pow(10, opponent.getThLevel() - player.getThLevel()) * multiplier ;

@@ -44,7 +44,9 @@ public class mainWindow extends JFrame {
 	private final Action action_3 = new SwingAction_3();
 	private final Action action_4 = new SwingAction_4();
 	private static Clan clan = new Clan();
-
+	private final Action action_5 = new SwingAction_5();
+	private final Action action_6 = new SwingAction_6();
+	private static war currWar = new war();
 	/**
 	 * Launch the application.
 	 */
@@ -79,21 +81,23 @@ public class mainWindow extends JFrame {
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.NORTH);
 		
-		Button button = new Button("New War");
-		panel.add(button);
-		
-		Button button_1 = new Button("Add Attack");
-		panel.add(button_1);
-		
-		Button button_2 = new Button("Add Defense");
-		panel.add(button_2);
-		
-		Button button_3 = new Button("End War");
-		panel.add(button_3);
-		button_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		JButton btnNewButton_10 = new JButton("New button");
+		btnNewButton_10.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		btnNewButton_10.setAction(action_6);
+		panel.add(btnNewButton_10);
+		
+		JButton btnNewButton_9 = new JButton("New button");
+		btnNewButton_9.setAction(action_5);
+		panel.add(btnNewButton_9);
+		
+		JButton btnNewButton_8 = new JButton("New button");
+		panel.add(btnNewButton_8);
+		
+		JButton btnNewButton_7 = new JButton("New button");
+		panel.add(btnNewButton_7);
 		
 		JPanel panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.SOUTH);
@@ -251,7 +255,7 @@ public class mainWindow extends JFrame {
 		System.out.println(clan);
 	}
 	private static void addPlayers() {
-		int num = Integer.parseInt(JOptionPane.showInputDialog("How many players are you removing?(Integer plz)"));
+		int num = Integer.parseInt(JOptionPane.showInputDialog("How many players are you adding?(Integer plz)"));
 		for(int i = 0; i < num; i++) {
 			final JTextField username = new JTextField(10);  
 			final JTextField thLevel = new JTextField(10); 
@@ -270,19 +274,46 @@ public class mainWindow extends JFrame {
 	            txtrHellosdfbasjd.setText(clan.toString());
 	            
 	        } 
-			/*JTextField username = new JTextField();
-			JTextField thLevel = new JTextField();
-			Object[] message = {
-			    "Username:", username,
-			    "TownHall Level:", thLevel
-			};
-			int option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
-			
-			if (option == JOptionPane.OK_OPTION) {
-			   clan.add(new Player(username.getText(), Integer.parseInt(thLevel.getText())));
-			   System.out.println(clan);
-			}*/
 		}
+	}
+	private static void addAttack() {
+		int num = Integer.parseInt(JOptionPane.showInputDialog("How many attacks are you adding?(Integer plz)"));
+		for(int i = 0; i < num; i++) {
+			final JTextField username = new JTextField(10);  
+			final JTextField thLevel = new JTextField(10); 
+			final JTextField defLevel = new JTextField(10);
+	        final JPanel panel = new JPanel(new GridLayout(6,1));  
+	        panel.add(new JLabel("Attacker:"));  
+	        panel.add(username);  
+	        panel.add(new JLabel("Townhall Level:"));  
+	        panel.add(thLevel);
+	        panel.add(new JLabel("Defender TownHall Level: "));
+	        panel.add(defLevel);
+	        Object[] options = { "OK", "Cancel" };          
+	        int result = JOptionPane.showOptionDialog(null, panel, "Data Entry", JOptionPane.OK_CANCEL_OPTION,   
+	                            JOptionPane.QUESTION_MESSAGE, null, options, null);  
+	          
+	        if (result == JOptionPane.OK_OPTION) {    
+	            clan.add(new Player(username.getText(), Integer.parseInt(thLevel.getText())));
+	            txtrHellosdfbasjd.setText(clan.toString());
+	            
+	        } 
+		}
+	}
+	private static void addWar() {
+		Clan tempClan = clan;
+		int num = Integer.parseInt(JOptionPane.showInputDialog("How many people aren't participating?(Integer plz)"));
+		for(int i = 0; i < num; i++) {
+			String removed = JOptionPane.showInputDialog("Enter Name:");
+			Player gone = tempClan.remove(new Player(removed));
+			if (gone == null) {
+				System.out.println ("Player Doesnt Exist");
+				i--;
+			} else {
+				System.out.println( "Removed:\n" + gone);
+			}
+		}
+		currWar = new war(tempClan.getMembers().toArray(new Player[1]));
 	}
 	//SWING ACTIONS
 	//--------------------------------------------------------------------------------------------------------------------------
@@ -330,6 +361,24 @@ public class mainWindow extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			JOptionPane pane = new JOptionPane();
 			removePlayers();
+		}
+	}
+	private class SwingAction_5 extends AbstractAction {
+		public SwingAction_5() {
+			putValue(NAME, "Add Attack");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			addAttack();
+		}
+	}
+	private class SwingAction_6 extends AbstractAction {
+		public SwingAction_6() {
+			putValue(NAME, "New War");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			addWar();
 		}
 	}
 }

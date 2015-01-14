@@ -18,6 +18,9 @@ public class Clan implements Iterable{
 		}
 		return clanString;
 	}
+	public ArrayList<Player> getMembers() {
+		return players;
+	}
 	public String printWar() {
 		String warString = "";
 		for (int i = 0; i < players.size(); i++) {
