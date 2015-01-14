@@ -48,6 +48,8 @@ public class mainWindow extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		FileHandle save = new FileHandle();
+		clan = save.loadClan();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				createAndShowGui();
@@ -126,6 +128,7 @@ public class mainWindow extends JFrame {
 		
 		JTextArea txtrHellosdfbasjd = new JTextArea();
 		txtrHellosdfbasjd.setEditable(false);
+		txtrHellosdfbasjd.setText(clan.toString());
 		panel_3.add(txtrHellosdfbasjd);
 		
 		JPanel panel_4 = new JPanel();
@@ -152,19 +155,21 @@ public class mainWindow extends JFrame {
 		panel_4.add(btnNewButton_4);
 		
 		
-		panel_5.setBounds(10, 46, 434,293);
+		panel_5.setBounds(10, 33, 434,293);
 		panel_4.add(panel_5);
 		
-		JButton btnNewButton_5 = new JButton("New button");
+		JButton btnNewButton_5 = new JButton("Previous War");
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_5.setBounds(83, 11, 132, 23);
+		
+		btnNewButton_5.setBounds(83, 7, 132, 23);
 		panel_4.add(btnNewButton_5);
 		
-		JButton btnNewButton_6 = new JButton("New button");
-		btnNewButton_6.setBounds(235, 11, 132, 23);
+		JButton btnNewButton_6 = new JButton("Next War");
+		
+		btnNewButton_6.setBounds(235, 7, 132, 23);
 		panel_4.add(btnNewButton_6);
 	}
 	private static void createAndShowGui() {

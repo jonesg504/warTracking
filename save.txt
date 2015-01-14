@@ -1,0 +1,44 @@
+clan
+Griffin 9 40.6
+Matt 9 30.5
+Jeffrey 9 2.3
+endLoadClan
+
+
+
+
+
+war0
+Griffin 9 0
+Matt 9 4
+Yessica 9 3
+Jeffrey 9 9
+war0End
+
+
+
+
+war1
+Griffin 9 2
+Matt 9 4
+Yessica 9 6
+Jeffrey 9 2
+war1End
+
+
+
+
+war2
+Griffin 9 6
+Matt 9 2
+Yessica 9 5
+Jeffrey 9 0
+war2End
+
+
+
+
+
+
+
+END

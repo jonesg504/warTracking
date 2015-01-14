@@ -10,6 +10,11 @@ public class Player{
 		this.stars = stars;
 		this.thLevel = thLevel;
 	}
+	public Player (String name, int thLevel, double worth) {
+		this.name = name;
+		this.worth = worth;
+		this.thLevel = thLevel;
+	}
 	public Player (String name, int thLevel) {
 		this.name = name;
 		stars = 0;
@@ -42,7 +47,7 @@ public class Player{
 		this.name = name;
 	}
 	public String toString() {
-		return "Name: " + name + "\nStars: " + stars + "\n";
+		return "Name: " + name + "\n  TownHall: " + thLevel + "\n  Worth: " + worth + "\n";
 	}
 	public boolean equals(Object other) {
 		Player playa = (Player) other;

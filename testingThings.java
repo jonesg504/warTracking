@@ -9,11 +9,6 @@ import java.io.FileReader;
 import java.io.IOException;
 public class testingThings {
 	private static File selectedFile = null;
-	public static void main(String[] args) throws IOException {
-		chooseFile();
-		printFile();
-	}
-	
 	public static void chooseFile() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -31,5 +26,10 @@ public class testingThings {
 		FileReader fr = new FileReader(selectedFile);
 		BufferedReader textReader = new BufferedReader(fr);
 		System.out.println(textReader.readLine());
+		String tok = textReader.readLine();
+		String[] values = tok.split("\\s");
+		for (int i = 0; i < values.length; i++) {
+			System.out.println(values[i]);
+		}
 	}
 }
