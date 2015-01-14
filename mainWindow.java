@@ -79,10 +79,10 @@ public class mainWindow extends JFrame {
 		Button button = new Button("New War");
 		panel.add(button);
 		
-		Button button_1 = new Button("Edit War");
+		Button button_1 = new Button("Add Attack");
 		panel.add(button_1);
 		
-		Button button_2 = new Button("Update Stars");
+		Button button_2 = new Button("Add Defense");
 		panel.add(button_2);
 		
 		Button button_3 = new Button("End War");
@@ -138,22 +138,34 @@ public class mainWindow extends JFrame {
 			}
 		});
 		btnNewButton_2.setAction(action);
-		btnNewButton_2.setBounds(10, 315, 132, 23);
+		btnNewButton_2.setBounds(10, 333, 132, 23);
 		panel_4.add(btnNewButton_2);
 		
 		JButton btnNewButton_3 = new JButton("New button");
 		btnNewButton_3.setAction(action_1);
-		btnNewButton_3.setBounds(152, 315, 145, 23);
+		btnNewButton_3.setBounds(152, 333, 145, 23);
 		panel_4.add(btnNewButton_3);
 		
 		JButton btnNewButton_4 = new JButton("New button");
 		btnNewButton_4.setAction(action_2);
-		btnNewButton_4.setBounds(307, 315, 137, 23);
+		btnNewButton_4.setBounds(307, 333, 137, 23);
 		panel_4.add(btnNewButton_4);
 		
 		
-		panel_5.setBounds(10, 10, 434,293);
+		panel_5.setBounds(10, 46, 434,293);
 		panel_4.add(panel_5);
+		
+		JButton btnNewButton_5 = new JButton("New button");
+		btnNewButton_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton_5.setBounds(83, 11, 132, 23);
+		panel_4.add(btnNewButton_5);
+		
+		JButton btnNewButton_6 = new JButton("New button");
+		btnNewButton_6.setBounds(235, 11, 132, 23);
+		panel_4.add(btnNewButton_6);
 	}
 	private static void createAndShowGui() {
         List<Double> scores = new ArrayList<>();
@@ -193,10 +205,10 @@ public class mainWindow extends JFrame {
             panel_5.validate();
         } else if (choice == 2) {
         	int maxDataPoints = 13;
-            int maxScore = 45;
+            int maxScore = 100;
             for (int i = 1; i <= maxDataPoints; i++) {
                 //scores.add((double) random.nextDouble() * maxScore);
-                scores.add((double) i/2);
+            	scores.add((double) random.nextDouble() * maxScore);
             }
             GraphPanel mainPanel = new GraphPanel(scores);
             mainPanel.setPreferredSize(new Dimension(450,300));
@@ -230,6 +242,7 @@ public class mainWindow extends JFrame {
 				System.out.println( "Removed:\n" + gone);
 			}
 		}
+		System.out.println(clan);
 	}
 	private static void addPlayers() {
 		int num = Integer.parseInt(JOptionPane.showInputDialog("How many players are you removing?(Integer plz)"));

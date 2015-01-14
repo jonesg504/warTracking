@@ -27,7 +27,10 @@ public class Clan implements Iterable{
 	}
 	public Player remove(Player player) {
 		for (int i = 0; i < players.size(); i++) {
-				return players.remove(i);
+			if (player.equals(players.get(i))) {
+				players.remove(i);
+				return player;
+			}
 		}
 		
 		return null;
