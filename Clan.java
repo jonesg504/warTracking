@@ -29,9 +29,9 @@ public class Clan implements Iterable{
 		}
 		return warString;
 	}
-	public Player getPlayer(Player player) {
+	public Player getPlayer(String name) {
 		for(Player play : players) {
-			if (play == player) {
+			if (play.getName().equals(name)) {
 				return play;
 			}
 		}

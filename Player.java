@@ -3,6 +3,7 @@ package warTracking;
 public class Player{
 	private String name;
 	private int stars;
+	private int totalStars;
 	private int thLevel;
 	private double worth = 0;
 	private int attackU = 0;
@@ -51,6 +52,10 @@ public class Player{
 	}
 	public void setStars(int stars) {
 		this.stars = stars;
+	}
+	public void addStars(int stars) {
+		this.stars += stars;
+		totalStars += stars;
 	}
 	public void setName(String name) {
 		this.name = name;

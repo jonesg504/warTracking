@@ -36,9 +36,14 @@ public class war extends Clan {
 		}
 		return (attacksWon/attacksUsed);
 	}
-	public double attack(Player player, Player opponent, int starsAdded) {
-		player.setStars(starsAdded);
-		double worth = Math.pow(10, player.getThLevel() - opponent.getThLevel()) * starsAdded;
+	public void resetStars() {
+		for (Player play : players) {
+			play.setStars(0);
+		}
+	}
+	public double attack(Player player, int opponent, int starsAdded) {
+		player.addStars(starsAdded);
+		double worth = Math.pow(10, player.getThLevel() - opponent) * starsAdded;
 		player.addWorth(worth);
 		return worth;
 	}

@@ -280,21 +280,21 @@ public class mainWindow extends JFrame {
 		int num = Integer.parseInt(JOptionPane.showInputDialog("How many attacks are you adding?(Integer plz)"));
 		for(int i = 0; i < num; i++) {
 			final JTextField username = new JTextField(10);  
-			final JTextField thLevel = new JTextField(10); 
 			final JTextField defLevel = new JTextField(10);
+			final JTextField stars = new JTextField(10);
 	        final JPanel panel = new JPanel(new GridLayout(6,1));  
 	        panel.add(new JLabel("Attacker:"));  
-	        panel.add(username);  
-	        panel.add(new JLabel("Townhall Level:"));  
-	        panel.add(thLevel);
+	        panel.add(username);
+	        panel.add(new JLabel("Bonus Stars:"));  
+	        panel.add(stars);
 	        panel.add(new JLabel("Defender TownHall Level: "));
 	        panel.add(defLevel);
 	        Object[] options = { "OK", "Cancel" };          
 	        int result = JOptionPane.showOptionDialog(null, panel, "Data Entry", JOptionPane.OK_CANCEL_OPTION,   
 	                            JOptionPane.QUESTION_MESSAGE, null, options, null);  
 	          
-	        if (result == JOptionPane.OK_OPTION) {    
-	            clan.add(new Player(username.getText(), Integer.parseInt(thLevel.getText())));
+	        if (result == JOptionPane.OK_OPTION) {
+	            currWar.attack(clan.getPlayer(username.getText()), Integer.parseInt(defLevel.getText()), Integer.parseInt(stars.getText()) );
 	            txtrHellosdfbasjd.setText(clan.toString());
 	            
 	        } 
@@ -314,6 +314,7 @@ public class mainWindow extends JFrame {
 			}
 		}
 		currWar = new war(tempClan.getMembers().toArray(new Player[1]));
+		currWar.resetStars();
 	}
 	//SWING ACTIONS
 	//--------------------------------------------------------------------------------------------------------------------------
