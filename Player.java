@@ -5,14 +5,23 @@ public class Player{
 	private int stars;
 	private int thLevel;
 	private double worth = 0;
+	private int attackU = 0;
+	private int attackW = 0;
 	public Player (String name, int stars, int thLevel) {
 		this.name = name;
 		this.stars = stars;
 		this.thLevel = thLevel;
 	}
+	public Player (String name, int stars, int thLevel, int attackU, int attackW) {
+		this.name = name;
+		this.stars = stars;
+		this.thLevel = thLevel;
+		this.attackU = attackU;
+		this.attackW = attackW;
+	}
 	public Player (String name, int thLevel, double worth) {
 		this.name = name;
-		this.worth = worth;
+		this.setWorth(worth);
 		this.thLevel = thLevel;
 	}
 	public Player (String name, int thLevel) {
@@ -38,7 +47,7 @@ public class Player{
 		return stars;
 	}
 	public void addWorth(double num) {
-		worth += num;
+		setWorth(getWorth() + num);
 	}
 	public void setStars(int stars) {
 		this.stars = stars;
@@ -47,7 +56,7 @@ public class Player{
 		this.name = name;
 	}
 	public String toString() {
-		return "Name: " + name + "\n  TownHall: " + thLevel + "\n  Worth: " + worth + "\n";
+		return name + "\n  TownHall: " + thLevel + "\n";
 	}
 	public boolean equals(Object other) {
 		Player playa = (Player) other;
@@ -57,6 +66,24 @@ public class Player{
 		
 		
 		return false;
+	}
+	public int getAttackW() {
+		return attackW;
+	}
+	public void addAttackW() {
+		this.attackW++;
+	}
+	public int getAttackU() {
+		return attackU;
+	}
+	public void setAttackU() {
+		this.attackU++;
+	}
+	public double getWorth() {
+		return worth;
+	}
+	public void setWorth(double worth) {
+		this.worth = worth;
 	}
 	
 	

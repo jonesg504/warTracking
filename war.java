@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class war extends Clan {
 	private int totalStars = 0;
+	private int attacksWon = 0;
+	private int attacksUsed = 0;
 	private ArrayList<Player> players = new ArrayList(50);
 	public war (Player...players) {
 		super(players);
@@ -22,6 +24,18 @@ public class war extends Clan {
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}
+	public double updateWL() {
+		attacksWon = 0;
+		attacksUsed = 0;
+		for (Player play : players) {
+			attacksWon += play.getAttackW();
+			attacksUsed += play.getAttackU();
+		}
+		if(attacksUsed == 0) {
+			return 0;
+		}
+		return (attacksWon/attacksUsed);
+	}
 	public double attack(Player player, Player opponent, int starsAdded) {
 		player.setStars(starsAdded);
 		double worth = Math.pow(10, player.getThLevel() - opponent.getThLevel()) * starsAdded;
@@ -34,4 +48,5 @@ public class war extends Clan {
 		player.addWorth(worth);
 		return worth;
 	}
+	
 }

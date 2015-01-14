@@ -36,7 +36,8 @@ import javax.swing.Action;
 
 public class mainWindow extends JFrame {
 	private static JPanel panel_5 = new JPanel();
-	private JPanel contentPane;
+	private static JPanel contentPane;
+	private static JTextArea txtrHellosdfbasjd = new JTextArea();
 	private final Action action = new SwingAction();
 	private final Action action_1 = new SwingAction_1();
 	private final Action action_2 = new SwingAction_2();
@@ -126,7 +127,7 @@ public class mainWindow extends JFrame {
 		panel_3.setOpaque(true);
 	    panel_3.setBackground(Color.WHITE);
 		
-		JTextArea txtrHellosdfbasjd = new JTextArea();
+		
 		txtrHellosdfbasjd.setEditable(false);
 		txtrHellosdfbasjd.setText(clan.toString());
 		panel_3.add(txtrHellosdfbasjd);
@@ -265,7 +266,9 @@ public class mainWindow extends JFrame {
 	                            JOptionPane.QUESTION_MESSAGE, null, options, null);  
 	          
 	        if (result == JOptionPane.OK_OPTION) {    
-	            clan.add(new Player(username.getText(), Integer.parseInt(thLevel.getText())));  
+	            clan.add(new Player(username.getText(), Integer.parseInt(thLevel.getText())));
+	            txtrHellosdfbasjd.setText(clan.toString());
+	            
 	        } 
 			/*JTextField username = new JTextField();
 			JTextField thLevel = new JTextField();
