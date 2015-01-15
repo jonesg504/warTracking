@@ -33,7 +33,7 @@ public class Player{
 	public Player (String name) {
 		this.name = name;
 		stars = 0;
-		this.thLevel = thLevel;
+		this.thLevel = 0;
 	}
 	public int getThLevel() {
 		return thLevel;
@@ -68,8 +68,6 @@ public class Player{
 		if(this.name.equals(playa.name)) {
 			return true;
 		}
-		
-		
 		return false;
 	}
 	public int getAttackW() {
@@ -81,8 +79,14 @@ public class Player{
 	public int getAttackU() {
 		return attackU;
 	}
-	public void setAttackU() {
+	public void addAttackU() {
 		this.attackU++;
+	}
+	public void setAttackU(int num) {
+		this.attackU = num;
+	}
+	public void setAttackW(int num) {
+		this.attackW = num;
 	}
 	public double getWorth() {
 		return worth;

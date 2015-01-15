@@ -72,6 +72,8 @@ public class FileHandle {
 			BufferedReader textReader = new BufferedReader(fr);
 			String line = textReader.readLine();
 			line = textReader.readLine();
+			line = textReader.readLine();
+
 			while(true) {
 				if (line.equals("endLoadClan")) {
 					break;

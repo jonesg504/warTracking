@@ -47,11 +47,13 @@ public class mainWindow extends JFrame {
 	private final Action action_5 = new SwingAction_5();
 	private final Action action_6 = new SwingAction_6();
 	private static war currWar = new war();
+	private static FileHandle save = new FileHandle();
+	private static ArrayList<String> saveList;
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		FileHandle save = new FileHandle();
+		saveList  = save.loadFile();
 		clan = save.loadClan();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -133,7 +135,7 @@ public class mainWindow extends JFrame {
 		
 		
 		txtrHellosdfbasjd.setEditable(false);
-		txtrHellosdfbasjd.setText(clan.toString());
+		txtrHellosdfbasjd.setText(currWar.printWar());
 		panel_3.add(txtrHellosdfbasjd);
 		
 		JPanel panel_4 = new JPanel();
@@ -271,11 +273,22 @@ public class mainWindow extends JFrame {
 	          
 	        if (result == JOptionPane.OK_OPTION) {    
 	            clan.add(new Player(username.getText(), Integer.parseInt(thLevel.getText())));
-	            txtrHellosdfbasjd.setText(clan.toString());
+	            savePlayer(clan.getPlayer(username.getText()));
+	            save.saveFile(saveList);
+	            txtrHellosdfbasjd.setText(currWar.printWar());
 	            
 	        } 
 		}
 	}
+	private static void savePlayer(Player player) {
+		saveList.add(3, player.getName() + " " + player.getThLevel() + " " + player.getWorth());
+	}
+	private static void editWorth(Player player, double worth) {
+		int pointer = saveList.indexOf(player.getName() + " " + player.getThLevel() + " " + player.getWorth());
+		player.addWorth(worth);
+		saveList.set(pointer, player.getName() + " " + player.getThLevel() + " " + player.getWorth());
+	}
+	
 	private static void addAttack() {
 		int num = Integer.parseInt(JOptionPane.showInputDialog("How many attacks are you adding?(Integer plz)"));
 		for(int i = 0; i < num; i++) {
@@ -294,10 +307,28 @@ public class mainWindow extends JFrame {
 	                            JOptionPane.QUESTION_MESSAGE, null, options, null);  
 	          
 	        if (result == JOptionPane.OK_OPTION) {
-	            currWar.attack(clan.getPlayer(username.getText()), Integer.parseInt(defLevel.getText()), Integer.parseInt(stars.getText()) );
-	            txtrHellosdfbasjd.setText(clan.toString());
+	        	saveAttack(clan.getPlayer(username.getText()), Integer.parseInt(stars.getText()));
+	            double worth = currWar.attack(clan.getPlayer(username.getText()), Integer.parseInt(defLevel.getText()), Integer.parseInt(stars.getText()) );
+	            editWorth(clan.getPlayer(username.getText()), worth);
+	            save.saveFile(saveList);
+	            txtrHellosdfbasjd.setText(currWar.printWar());
 	            
 	        } 
+		}
+	}
+	private static void saveAttack(Player player, int stars) {
+		int pointer = saveList.lastIndexOf(player.getName() + " " + player.getThLevel() + " " + player.getStars() + " " + player.getAttackU() + " " + player.getAttackW());
+		if (pointer  == -1) {
+			System.out.println("STUPID");
+			
+		} else {
+			int aU = player.getAttackU() + 1;
+			int aW = player.getAttackW();
+			if (stars > 0 ) {
+				aW++;
+			}
+			int star = player.getStars() + stars;
+			saveList.set(pointer, player.getName() + " " + player.getThLevel() + " " + star + " " + aU + " " + aW);
 		}
 	}
 	private static void addWar() {
@@ -313,11 +344,30 @@ public class mainWindow extends JFrame {
 				System.out.println( "Removed:\n" + gone);
 			}
 		}
+		
 		currWar = new war(tempClan.getMembers().toArray(new Player[1]));
-		currWar.resetStars();
+		currWar.resetPlayers();
+		addWarSave();
+		saveList.set(0, "" + (Integer.parseInt(saveList.get(0)) + 1));
+		save.saveFile(saveList);
+		txtrHellosdfbasjd.setText(currWar.printWar());
+	}
+	private static void addWarSave() {
+		int pointer = saveList.lastIndexOf("war" + saveList.get(0) + "End");
+		pointer++;
+		saveList.add(pointer, "");
+		pointer++;
+		saveList.add(pointer, "war" + (Integer.parseInt(saveList.get(0)) + 1));
+		for(Object play : currWar) {
+			pointer++;
+			Player p = (Player) play;
+			saveList.add(pointer, p.getName() + " " + p.getThLevel() + " " + p.getStars() + " " + p.getAttackU() + " " + p.getAttackW());
+		}
+		pointer++;
+		saveList.add(pointer, "war" + (Integer.parseInt(saveList.get(0)) + 1) + "End");
 	}
 	//SWING ACTIONS
-	//--------------------------------------------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------------------------------------
 	private class SwingAction extends AbstractAction {
 		public SwingAction() {
 			putValue(NAME, "Performance");

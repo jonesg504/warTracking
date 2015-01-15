@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Clan implements Iterable{
-	private ArrayList<Player> players = new ArrayList(50);
+	protected ArrayList<Player> players = new ArrayList(50);
 	public Clan(Player... players) {
 		for(int i = 0; i < players.length; i++) {
 			this.players.add(players[i]);
@@ -25,7 +25,7 @@ public class Clan implements Iterable{
 		String warString = "";
 		for (int i = 0; i < players.size(); i++) {
 			warString = warString + players.get(i).toString();
-			warString += "  Attacks Used: " + players.get(i).getAttackU() + "\n  Attacks Won: " + players.get(i).getAttackU() + "\n";
+			warString += "  Attacks Used: " + players.get(i).getAttackU() + "\n  Attacks Won: " + players.get(i).getAttackW() + "\n";
 		}
 		return warString;
 	}
