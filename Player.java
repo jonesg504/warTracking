@@ -1,6 +1,6 @@
 package warTracking;
 
-public class Player{
+public class Player implements Comparable{
 	private String name;
 	private int stars;
 	private int totalStars;
@@ -9,29 +9,29 @@ public class Player{
 	private int attackU = 0;
 	private int attackW = 0;
 	public Player (String name, int stars, int thLevel) {
-		this.name = name;
+		this.name = name.toLowerCase();
 		this.stars = stars;
 		this.thLevel = thLevel;
 	}
 	public Player (String name, int stars, int thLevel, int attackU, int attackW) {
-		this.name = name;
+		this.name = name.toLowerCase();
 		this.stars = stars;
 		this.thLevel = thLevel;
 		this.attackU = attackU;
 		this.attackW = attackW;
 	}
 	public Player (String name, int thLevel, double worth) {
-		this.name = name;
+		this.name = name.toLowerCase();
 		this.setWorth(worth);
 		this.thLevel = thLevel;
 	}
 	public Player (String name, int thLevel) {
-		this.name = name;
+		this.name = name.toLowerCase();
 		stars = 0;
 		this.thLevel = thLevel;
 	}
 	public Player (String name) {
-		this.name = name;
+		this.name = name.toLowerCase();
 		stars = 0;
 		this.thLevel = 0;
 	}
@@ -61,7 +61,7 @@ public class Player{
 		this.name = name;
 	}
 	public String toString() {
-		return name + "\n  TownHall: " + thLevel + "\n";
+		return name +  "\n  TownHall: " + thLevel + "\n";
 	}
 	public boolean equals(Object other) {
 		Player playa = (Player) other;
@@ -93,6 +93,11 @@ public class Player{
 	}
 	public void setWorth(double worth) {
 		this.worth = worth;
+	}
+	@Override
+	public int compareTo(Object o) {
+		Player other = (Player) o;
+		return (int) (other.getWorth() - this.getWorth());
 	}
 	
 	

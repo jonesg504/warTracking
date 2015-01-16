@@ -14,7 +14,6 @@ public class Clan implements Iterable{
 		String clanString = "";
 		for (int i = 0; i < players.size(); i++) {
 			clanString = clanString + players.get(i).toString();
-			clanString += "  Worth: " + players.get(i).getWorth() + "\n";
 		}
 		return clanString;
 	}
@@ -25,7 +24,7 @@ public class Clan implements Iterable{
 		String warString = "";
 		for (int i = 0; i < players.size(); i++) {
 			warString = warString + players.get(i).toString();
-			warString += "  Attacks Used: " + players.get(i).getAttackU() + "\n  Attacks Won: " + players.get(i).getAttackW() + "\n";
+			warString += "  Attacks: " + players.get(i).getAttackU() + "\n  Won: " + players.get(i).getAttackW() + "\n";
 		}
 		return warString;
 	}
@@ -36,6 +35,9 @@ public class Clan implements Iterable{
 			}
 		}
 		return null;
+	}
+	public ArrayList<Player> getList() {
+		return players;
 	}
 	public Player remove(Player player) {
 		for (int i = 0; i < players.size(); i++) {

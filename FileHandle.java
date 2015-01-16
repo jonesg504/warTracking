@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 public class FileHandle {
 	private File selectedFile = null;
@@ -25,9 +26,9 @@ public class FileHandle {
 		if (result == JFileChooser.APPROVE_OPTION) {
 		    selectedFile = fileChooser.getSelectedFile();
 		    if (!selectedFile.getName().equals("save.txt")) {
-		    	System.out.println("INVALID SAVE FILE: Please load \"save.txt\"");
+		    	JOptionPane.showMessageDialog(null, "INVALID FILE: Plz load \"save.txt\"");
 		    } else {
-		    	System.out.println("Save file loaded successfully!");
+		    	JOptionPane.showMessageDialog(null, "Save file loaded successfully!");
 		    }
 		}
 	}
@@ -35,7 +36,6 @@ public class FileHandle {
 
 		FileReader fr = new FileReader(selectedFile);
 		BufferedReader textReader = new BufferedReader(fr);
-		System.out.println(textReader.readLine());
 		String tok = textReader.readLine();
 		String[] values = tok.split("\\s");
 		for (int i = 0; i < values.length; i++) {
@@ -110,7 +110,7 @@ public class FileHandle {
 					break;
 				}
 				String[] profile = line.split("\\s");
-				loadWar.add(new Player(profile[0], Integer.parseInt(profile[2]), Integer.parseInt(profile[1]), Integer.parseInt(profile[3]),Integer.parseInt(profile[4])));
+				loadWar.add(new Player(profile[0], Integer.parseInt(profile[2]), Integer.parseInt(profile[1]), Integer.parseInt(profile[3]), Integer.parseInt(profile[4])));
 				line = textReader.readLine();
 			}
 			fr.close();
@@ -123,9 +123,8 @@ public class FileHandle {
 	}
 	public static void saveFile(ArrayList<String> fileSave) {
 		 String b = System.getProperty("line.separator");
-        String path = "C:\\myfile.txt"; 
+        String path =System.getProperty("user.dir") + "/save.txt"; 
         FileWriter w = null; 
-        System.out.println(fileSave);
         try
         {  
               w = new FileWriter(path);  
@@ -134,7 +133,6 @@ public class FileHandle {
            	   w.write(player  + b);
               }
               w.flush(); 
-              System.out.println("File Written: " + path);
         }
         catch(IOException ex)
         {

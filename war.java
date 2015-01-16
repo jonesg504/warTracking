@@ -15,7 +15,7 @@ public class war extends Clan {
 		totalStars = stars;
 	}
 	public void updateStars() {
-		for (Player play : players) {
+		for (Player play : super.players) {
 			totalStars += play.getStars();
 		}
 	}
@@ -44,8 +44,24 @@ public class war extends Clan {
 			play.setAttackW(0);
 		}
 	}
+	public double parting() {
+		double full = super.players.size() * 2;
+		double part = 0;
+		for (Player play : super.players) {
+			part += play.getAttackU();
+		}
+		return (part/full) * 100 ;
+	}
+	public double losing() {
+		double losses = 0;
+		for (Player play : super.players) {
+			losses += play.getAttackU() - play.getAttackW();
+		}
+		return losses;
+	}
 	public double attack(Player player, int opponent, int starsAdded) {
 		player.addStars(starsAdded);
+		totalStars += starsAdded;
 		player.addAttackU();
 		if (starsAdded > 0) {
 			player.addAttackW();
@@ -54,10 +70,9 @@ public class war extends Clan {
 		return worth;
 	}
 	
-	public double defense(Player player, Player opponent, int starsAdded) {
+	public double defense(Player player, int opponent, int starsAdded) {
 		double multiplier = Math.pow(2, -starsAdded);
-		double worth = Math.pow(10, opponent.getThLevel() - player.getThLevel()) * multiplier ;
-		player.addWorth(worth);
+		double worth = Math.pow(10, opponent - player.getThLevel()) * multiplier ;
 		return worth;
 	}
 	

@@ -28,16 +28,17 @@ import net.miginfocom.swing.MigLayout;
 
 import java.awt.FlowLayout;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JScrollPane;
 
 public class mainWindow extends JFrame {
 	private static JPanel panel_5 = new JPanel();
 	private static JPanel contentPane;
-	private static JTextArea txtrHellosdfbasjd = new JTextArea();
 	private final Action action = new SwingAction();
 	private final Action action_1 = new SwingAction_1();
 	private final Action action_2 = new SwingAction_2();
@@ -47,14 +48,33 @@ public class mainWindow extends JFrame {
 	private final Action action_5 = new SwingAction_5();
 	private final Action action_6 = new SwingAction_6();
 	private static war currWar = new war();
+	private static JTextArea textArea = new JTextArea();
 	private static FileHandle save = new FileHandle();
 	private static ArrayList<String> saveList;
+	private static JTextArea txtrHelloMyName = new JTextArea();
+	private static int currentWarNumber = 0;
+	private final Action action_7 = new SwingAction_7();
+	private final Action action_8 = new SwingAction_8();
+	private static JScrollPane scrollPane = new JScrollPane();
+	private final Action action_9 = new SwingAction_9();
+	private static ArrayList<Player> sortedClan;
+	private static String bestPlayers = "";
+	private static String worstPlayers = "";
+	private static JTextArea txtrTopPlayers = new JTextArea();
+	private static JTextArea txtrWorstPlayers = new JTextArea();
+	private final Action action_10 = new SwingAction_10();
+	private final Action action_11 = new SwingAction_11();
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		saveList  = save.loadFile();
 		clan = save.loadClan();
+		sortedClan = clan.getList();
+		Collections.sort(sortedClan);
+		currentWarNumber = Integer.parseInt(saveList.get(0));
+		setBest();
+		setWorst();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				createAndShowGui();
@@ -96,9 +116,11 @@ public class mainWindow extends JFrame {
 		panel.add(btnNewButton_9);
 		
 		JButton btnNewButton_8 = new JButton("New button");
+		btnNewButton_8.setAction(action_9);
 		panel.add(btnNewButton_8);
 		
 		JButton btnNewButton_7 = new JButton("New button");
+		btnNewButton_7.setAction(action_10);
 		panel.add(btnNewButton_7);
 		
 		JPanel panel_1 = new JPanel();
@@ -112,31 +134,27 @@ public class mainWindow extends JFrame {
 		btnNewButton_1.setAction(action_4);
 		panel_1.add(btnNewButton_1);
 		
+		JButton btnNewButton_11 = new JButton("New button");
+		btnNewButton_11.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnNewButton_11.setAction(action_11);
+		panel_1.add(btnNewButton_11);
+		
 		JPanel panel_2 = new JPanel();
 		contentPane.add(panel_2, BorderLayout.WEST);
 		panel_2.setLayout(new GridLayout(0, 1, 0, 0));
 		panel_2.setPreferredSize(new Dimension(100, 200));
 		
-		JTextArea txtrTopPlayers = new JTextArea();
+		
 		txtrTopPlayers.setEditable(false);
-		txtrTopPlayers.setText("Top Players \r\n Griffin \r\n Your Mom");
+		txtrTopPlayers.setText(bestPlayers);
 		panel_2.add(txtrTopPlayers);
 		
-		JTextArea txtrWorstPlayers = new JTextArea();
 		txtrWorstPlayers.setEditable(false);
-		txtrWorstPlayers.setText("Worst Players");
+		txtrWorstPlayers.setText(worstPlayers);
 		panel_2.add(txtrWorstPlayers);
-		
-		JPanel panel_3 = new JPanel();
-		contentPane.add(panel_3, BorderLayout.EAST);
-		panel_3.setPreferredSize(new Dimension(100, 200));
-		panel_3.setOpaque(true);
-	    panel_3.setBackground(Color.WHITE);
-		
-		
-		txtrHellosdfbasjd.setEditable(false);
-		txtrHellosdfbasjd.setText(currWar.printWar());
-		panel_3.add(txtrHellosdfbasjd);
 		
 		JPanel panel_4 = new JPanel();
 		contentPane.add(panel_4, BorderLayout.CENTER);
@@ -166,6 +184,7 @@ public class mainWindow extends JFrame {
 		panel_4.add(panel_5);
 		
 		JButton btnNewButton_5 = new JButton("Previous War");
+		btnNewButton_5.setAction(action_7);
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -175,67 +194,65 @@ public class mainWindow extends JFrame {
 		panel_4.add(btnNewButton_5);
 		
 		JButton btnNewButton_6 = new JButton("Next War");
+		btnNewButton_6.setAction(action_8);
 		
 		btnNewButton_6.setBounds(235, 7, 132, 23);
 		panel_4.add(btnNewButton_6);
+		
+		
+		contentPane.add(scrollPane, BorderLayout.EAST);
+		scrollPane.setPreferredSize(new Dimension(100, 22));
+		txtrHelloMyName.setEditable(false);
+		
+		
+		txtrHelloMyName.setLineWrap(true);
+		currWar = save.loadWar(currentWarNumber);
+		txtrHelloMyName.setText("War: "+ currentWarNumber + "\n" + currWar.printWar());
+		scrollPane.setViewportView(txtrHelloMyName);
+	}
+	private static void setBest() {
+		Collections.sort(sortedClan);
+		bestPlayers = "Top Members: \n";
+		for(int i = 0; i < 7; i++) {
+			bestPlayers = bestPlayers + (i + 1) + ") " + sortedClan.get(i).getName() + "\n";
+		}
+		txtrTopPlayers.setText(bestPlayers);
+		
+	}
+	private static void setWorst() {
+		Collections.sort(sortedClan);
+		int s = sortedClan.size() - 1;
+		worstPlayers = "Bottom Members: \n";
+		for(int i = s  ; i > s - 5 ; i--) {
+			worstPlayers = worstPlayers + (i + 1) + ") " + sortedClan.get(i).getName() + "\n";
+		}
+		txtrWorstPlayers.setText(worstPlayers);
 	}
 	private static void createAndShowGui() {
-        List<Double> scores = new ArrayList<>();
-        Random random = new Random();
-        int maxDataPoints = 10;
-        int maxScore = 10;
-        for (int i = 0; i < maxDataPoints; i++) {
-          //  scores.add((double) random.nextDouble() * maxScore);
-            scores.add((double) i);
-        }
-        GraphPanel mainPanel = new GraphPanel(scores);
+		GraphPanel mainPanel = new GraphPanel(graphData.performance(save, saveList));
         mainPanel.setPreferredSize(new Dimension(450, 300));
         panel_5.add(mainPanel);
-        //JFrame frame = new JFrame("DrawGraph");
-        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.getContentPane().add(mainPanel);
-        //frame.pack();
-        //frame.setLocationRelativeTo(null);
-        //frame.setVisible(true);
     }
 	
 	private static void editGraph(int choice) {
 		List<Double> scores = new ArrayList<>();
         Random random = new Random();
         if (choice == 1) {
-        	int maxDataPoints = 13;
-            int maxScore = 45;
-            for (int i = 1; i <= maxDataPoints; i++) {
-                //scores.add((double) random.nextDouble() * maxScore);
-                scores.add((double) i);
-            }
-            GraphPanel mainPanel = new GraphPanel(scores);
+            GraphPanel mainPanel = new GraphPanel(graphData.performance(save, saveList));
             mainPanel.setPreferredSize(new Dimension(450,300));
             panel_5.remove(0);
             panel_5.add(mainPanel);
             panel_5.repaint();
             panel_5.validate();
         } else if (choice == 2) {
-        	int maxDataPoints = 13;
-            int maxScore = 100;
-            for (int i = 1; i <= maxDataPoints; i++) {
-                //scores.add((double) random.nextDouble() * maxScore);
-            	scores.add((double) random.nextDouble() * maxScore);
-            }
-            GraphPanel mainPanel = new GraphPanel(scores);
+        	GraphPanel mainPanel = new GraphPanel(graphData.parting(save, saveList));
             mainPanel.setPreferredSize(new Dimension(450,300));
             panel_5.remove(0);
             panel_5.add(mainPanel);
             panel_5.repaint();
             panel_5.validate();
         } else if (choice == 3) {
-        	int maxDataPoints = 13;
-            int maxScore = 45;
-            for (int i = 1; i <= maxDataPoints; i++) {
-                scores.add((double) random.nextDouble() * maxScore);
-                //scores.add((double) i);
-            }
-            GraphPanel mainPanel = new GraphPanel(scores);
+        	GraphPanel mainPanel = new GraphPanel(graphData.losses(save, saveList));
             mainPanel.setPreferredSize(new Dimension(450,300));
             panel_5.remove(0);
             panel_5.add(mainPanel);
@@ -246,15 +263,13 @@ public class mainWindow extends JFrame {
 	private static void removePlayers() {
 		int num = Integer.parseInt(JOptionPane.showInputDialog("How many players are you removing?(Integer plz)"));
 		for (int i = 0; i < num; i++) {
-			String removed = JOptionPane.showInputDialog("Enter Name:");
+			String removed = JOptionPane.showInputDialog("Enter Name:").toLowerCase();
 			Player gone = clan.remove(new Player(removed));
 			if (gone == null) {
-				System.out.println ("Player Doesnt Exist");
-			} else {
-				System.out.println( "Removed:\n" + gone);
+				JOptionPane.showMessageDialog(null, "Player doesnt Exist!");
 			}
+			
 		}
-		System.out.println(clan);
 	}
 	private static void addPlayers() {
 		int num = Integer.parseInt(JOptionPane.showInputDialog("How many players are you adding?(Integer plz)"));
@@ -272,21 +287,24 @@ public class mainWindow extends JFrame {
 	                            JOptionPane.QUESTION_MESSAGE, null, options, null);  
 	          
 	        if (result == JOptionPane.OK_OPTION) {    
-	            clan.add(new Player(username.getText(), Integer.parseInt(thLevel.getText())));
-	            savePlayer(clan.getPlayer(username.getText()));
+	            clan.add(new Player(username.getText().toLowerCase(), Integer.parseInt(thLevel.getText())));
+	            savePlayer(clan.getPlayer(username.getText().toLowerCase()));
 	            save.saveFile(saveList);
-	            txtrHellosdfbasjd.setText(currWar.printWar());
 	            
 	        } 
 		}
 	}
 	private static void savePlayer(Player player) {
-		saveList.add(3, player.getName() + " " + player.getThLevel() + " " + player.getWorth());
+		saveList.add(3, player.getName().toLowerCase() + " " + player.getThLevel() + " " + player.getWorth());
 	}
 	private static void editWorth(Player player, double worth) {
-		int pointer = saveList.indexOf(player.getName() + " " + player.getThLevel() + " " + player.getWorth());
+		int pointer = saveList.indexOf(player.getName().toLowerCase() + " " + player.getThLevel() + " " + player.getWorth());
 		player.addWorth(worth);
-		saveList.set(pointer, player.getName() + " " + player.getThLevel() + " " + player.getWorth());
+		saveList.set(pointer, player.getName().toLowerCase() + " " + player.getThLevel() + " " + player.getWorth());
+		Collections.sort(sortedClan);
+		setBest();
+        setWorst();
+		
 	}
 	
 	private static void addAttack() {
@@ -307,19 +325,49 @@ public class mainWindow extends JFrame {
 	                            JOptionPane.QUESTION_MESSAGE, null, options, null);  
 	          
 	        if (result == JOptionPane.OK_OPTION) {
-	        	saveAttack(clan.getPlayer(username.getText()), Integer.parseInt(stars.getText()));
-	            double worth = currWar.attack(clan.getPlayer(username.getText()), Integer.parseInt(defLevel.getText()), Integer.parseInt(stars.getText()) );
+	        	saveAttack(clan.getPlayer(username.getText().toLowerCase()), Integer.parseInt(stars.getText()));
+	            double worth = currWar.attack(clan.getPlayer(username.getText().toLowerCase()), Integer.parseInt(defLevel.getText()), Integer.parseInt(stars.getText()) );
 	            editWorth(clan.getPlayer(username.getText()), worth);
 	            save.saveFile(saveList);
-	            txtrHellosdfbasjd.setText(currWar.printWar());
+	            currWar = save.loadWar(currentWarNumber);
+	    		txtrHelloMyName.setText("War: "+ currentWarNumber + "\n" + currWar.printWar());
+	    		txtrHelloMyName.setCaretPosition(0);
 	            
 	        } 
 		}
 	}
+	private static void addDefense() {
+		int num = Integer.parseInt(JOptionPane.showInputDialog("How many defenses are you adding?(Integer plz)"));
+		for(int i = 0; i < num; i++) {
+			final JTextField username = new JTextField(10);  
+			final JTextField defLevel = new JTextField(10);
+			final JTextField stars = new JTextField(10);
+	        final JPanel panel = new JPanel(new GridLayout(6,1));  
+	        panel.add(new JLabel("Defender:"));  
+	        panel.add(username);
+	        panel.add(new JLabel("Added Stars:"));  
+	        panel.add(stars);
+	        panel.add(new JLabel("Attacker TownHall Level: "));
+	        panel.add(defLevel);
+	        Object[] options = { "OK", "Cancel" };          
+	        int result = JOptionPane.showOptionDialog(null, panel, "Data Entry", JOptionPane.OK_CANCEL_OPTION,   
+	                            JOptionPane.QUESTION_MESSAGE, null, options, null);  
+	          
+	        if (result == JOptionPane.OK_OPTION) {
+	            double worth = currWar.defense(clan.getPlayer(username.getText().toLowerCase()), Integer.parseInt(defLevel.getText()), Integer.parseInt(stars.getText()) );
+	            editWorth(clan.getPlayer(username.getText().toLowerCase()), worth);
+	            save.saveFile(saveList);
+	    		txtrHelloMyName.setText("War: "+ currentWarNumber + "\n" + currWar.printWar());
+	    		txtrHelloMyName.setCaretPosition(0);
+	            
+	        } 
+		}
+	}
+	
 	private static void saveAttack(Player player, int stars) {
-		int pointer = saveList.lastIndexOf(player.getName() + " " + player.getThLevel() + " " + player.getStars() + " " + player.getAttackU() + " " + player.getAttackW());
+		int pointer = saveList.lastIndexOf(player.getName().toLowerCase() + " " + player.getThLevel() + " " + player.getStars() + " " + player.getAttackU() + " " + player.getAttackW());
 		if (pointer  == -1) {
-			System.out.println("STUPID");
+			JOptionPane.showMessageDialog(null, "ERROR: I think you typed the name wrong? Check clan list!");
 			
 		} else {
 			int aU = player.getAttackU() + 1;
@@ -328,20 +376,18 @@ public class mainWindow extends JFrame {
 				aW++;
 			}
 			int star = player.getStars() + stars;
-			saveList.set(pointer, player.getName() + " " + player.getThLevel() + " " + star + " " + aU + " " + aW);
+			saveList.set(pointer, player.getName().toLowerCase() + " " + player.getThLevel() + " " + star + " " + aU + " " + aW);
 		}
 	}
 	private static void addWar() {
 		Clan tempClan = clan;
 		int num = Integer.parseInt(JOptionPane.showInputDialog("How many people aren't participating?(Integer plz)"));
 		for(int i = 0; i < num; i++) {
-			String removed = JOptionPane.showInputDialog("Enter Name:");
+			String removed = JOptionPane.showInputDialog("Enter Name:").toLowerCase();
 			Player gone = tempClan.remove(new Player(removed));
 			if (gone == null) {
-				System.out.println ("Player Doesnt Exist");
+				JOptionPane.showMessageDialog(null, "Player Doesn't Exist");
 				i--;
-			} else {
-				System.out.println( "Removed:\n" + gone);
 			}
 		}
 		
@@ -350,7 +396,11 @@ public class mainWindow extends JFrame {
 		addWarSave();
 		saveList.set(0, "" + (Integer.parseInt(saveList.get(0)) + 1));
 		save.saveFile(saveList);
-		txtrHellosdfbasjd.setText(currWar.printWar());
+		currentWarNumber++;
+		txtrHelloMyName.setText("War: "+ currentWarNumber + "\n" + currWar.printWar());
+		currentWarNumber = Integer.parseInt(saveList.get(0));
+		txtrHelloMyName.setCaretPosition(0);
+		
 	}
 	private static void addWarSave() {
 		int pointer = saveList.lastIndexOf("war" + saveList.get(0) + "End");
@@ -365,6 +415,68 @@ public class mainWindow extends JFrame {
 		}
 		pointer++;
 		saveList.add(pointer, "war" + (Integer.parseInt(saveList.get(0)) + 1) + "End");
+	}
+	private static void loadPreviousWar() {
+		if (currentWarNumber <= 0) {
+			JOptionPane.showMessageDialog(null, "ALREADY ON EARLIEST WAR");
+		} else {
+			currWar = save.loadWar(currentWarNumber - 1); 
+			currentWarNumber--;
+			txtrHelloMyName.setText("War: "+ currentWarNumber + "\n" + currWar.printWar());
+			txtrHelloMyName.setCaretPosition(0);
+			
+		}
+	}
+	private static void loadNextWar() {
+		if (currentWarNumber >= Integer.parseInt(saveList.get(0))) {
+			JOptionPane.showMessageDialog(null, "ALREADY ON CURRENT WAR");
+		} else {
+			currWar = save.loadWar(currentWarNumber + 1); 
+			currentWarNumber++;
+			txtrHelloMyName.setText("War: "+ currentWarNumber + "\n" + currWar.printWar());
+			txtrHelloMyName.setCaretPosition(0);
+		}
+	}
+	private static void editAttack() {
+		String name = JOptionPane.showInputDialog("Who's Attacks?");
+		String choice = JOptionPane.showInputDialog("Have they attacked more than once? (y/n)");
+		int num = 0;
+		if(choice.equalsIgnoreCase("y")) {
+			num = 2;
+		} else if (choice.equalsIgnoreCase("n")) {
+			num = 1;
+		}
+		Player player = clan.getPlayer(name);
+		//System.out.println(player.getName() + " " + player.getThLevel() + " " + player.getStars() + " " + player.getAttackU() + " " + player.getAttackW());
+		int pointer = saveList.lastIndexOf(player.getName() + " " + player.getThLevel() + " " + player.getStars() + " " + player.getAttackU() + " " + player.getAttackW());
+		saveList.set(pointer, player.getName() + " " + player.getThLevel() + " 0 0 0");
+		player.setAttackU(0);
+		player.setStars(0);
+		player.setAttackW(0);
+		for(int i = 0; i < num; i++) {
+			final JTextField defLevel = new JTextField(10);
+			final JTextField stars = new JTextField(10);
+	        final JPanel panel = new JPanel(new GridLayout(5,1)); 
+	        panel.add(new JLabel("Attack " + (i+1)));  
+	        panel.add(new JLabel("Added Stars:"));  
+	        panel.add(stars);
+	        panel.add(new JLabel("Attacker TownHall Level: "));
+	        panel.add(defLevel);
+	        Object[] options = { "OK", "Cancel" };          
+	        int result = JOptionPane.showOptionDialog(null, panel, "Data Entry", JOptionPane.OK_CANCEL_OPTION,   
+	                            JOptionPane.QUESTION_MESSAGE, null, options, null);  
+	          
+	        if (result == JOptionPane.OK_OPTION) {
+	        	saveAttack(player, Integer.parseInt(stars.getText()));
+	            double worth = currWar.attack(player, Integer.parseInt(defLevel.getText()), Integer.parseInt(stars.getText()) );
+	            editWorth(player, worth);
+	            save.saveFile(saveList);
+	            currWar = save.loadWar(currentWarNumber);
+	    		txtrHelloMyName.setText("War: "+ currentWarNumber + "\n" + currWar.printWar());
+	    		txtrHelloMyName.setCaretPosition(0);
+	        
+			}
+		}
 	}
 	//SWING ACTIONS
 	//-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -430,6 +542,51 @@ public class mainWindow extends JFrame {
 		}
 		public void actionPerformed(ActionEvent e) {
 			addWar();
+		}
+	}
+	private class SwingAction_7 extends AbstractAction {
+		public SwingAction_7() {
+			putValue(NAME, "Previous War");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			loadPreviousWar();
+		}
+	}
+	private class SwingAction_8 extends AbstractAction {
+		public SwingAction_8() {
+			putValue(NAME, "Next War");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			loadNextWar();
+		}
+	}
+	private class SwingAction_9 extends AbstractAction {
+		public SwingAction_9() {
+			putValue(NAME, "Add Defense");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			addDefense();
+		}
+	}
+	private class SwingAction_10 extends AbstractAction {
+		public SwingAction_10() {
+			putValue(NAME, "Edit Attack");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			editAttack();
+		}
+	}
+	private class SwingAction_11 extends AbstractAction {
+		public SwingAction_11() {
+			putValue(NAME, "Clan List");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			JOptionPane.showMessageDialog(null, clan.toString());
 		}
 	}
 }
