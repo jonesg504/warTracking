@@ -32,4 +32,27 @@ public class graphData {
 		}
 		return scores;
 	}
+	public static ArrayList<Double> playerWarStat(Player player, FileHandle file, ArrayList<String> saveList) {
+		boolean clanList = true;
+		ArrayList<Double> list = new ArrayList<Double>();
+		for(String str : saveList) {
+			if(str.contains(player.getName())) {
+				if (clanList) {
+					clanList = false;
+				} else {
+					String[] values = str.split("\\s");
+//					System.out.println(values[0]);
+//					System.out.println(values[1]);
+//					System.out.println(values[2]);
+//					System.out.println(values[3]);
+					int stars = Integer.parseInt(values[2]);
+					int attacksUsed = Integer.parseInt(values[3]);
+					list.add((double) stars);
+				}
+			}
+		}
+		
+		
+		return list;
+	}
 }

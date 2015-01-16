@@ -64,6 +64,8 @@ public class mainWindow extends JFrame {
 	private static JTextArea txtrWorstPlayers = new JTextArea();
 	private final Action action_10 = new SwingAction_10();
 	private final Action action_11 = new SwingAction_11();
+	private final Action action_12 = new SwingAction_12();
+	private final Action action_13 = new SwingAction_13();
 	/**
 	 * Launch the application.
 	 */
@@ -190,14 +192,24 @@ public class mainWindow extends JFrame {
 			}
 		});
 		
-		btnNewButton_5.setBounds(83, 7, 132, 23);
+		btnNewButton_5.setBounds(236, 7, 109, 23);
 		panel_4.add(btnNewButton_5);
 		
 		JButton btnNewButton_6 = new JButton("Next War");
 		btnNewButton_6.setAction(action_8);
 		
-		btnNewButton_6.setBounds(235, 7, 132, 23);
+		btnNewButton_6.setBounds(345, 7, 109, 23);
 		panel_4.add(btnNewButton_6);
+		
+		JButton btnNewButton_12 = new JButton("New button");
+		btnNewButton_12.setAction(action_12);
+		btnNewButton_12.setBounds(10, 7, 116, 23);
+		panel_4.add(btnNewButton_12);
+		
+		JButton btnNewButton_13 = new JButton("New button");
+		btnNewButton_13.setAction(action_13);
+		btnNewButton_13.setBounds(127, 7, 109, 23);
+		panel_4.add(btnNewButton_13);
 		
 		
 		contentPane.add(scrollPane, BorderLayout.EAST);
@@ -218,6 +230,18 @@ public class mainWindow extends JFrame {
 		}
 		txtrTopPlayers.setText(bestPlayers);
 		
+	}
+	private static void runPlayerStats() {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					playerStats frame = new playerStats(clan, saveList, save);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 	private static void setWorst() {
 		Collections.sort(sortedClan);
@@ -546,7 +570,7 @@ public class mainWindow extends JFrame {
 	}
 	private class SwingAction_7 extends AbstractAction {
 		public SwingAction_7() {
-			putValue(NAME, "Previous War");
+			putValue(NAME, "Prev War");
 			putValue(SHORT_DESCRIPTION, "Some short description");
 		}
 		public void actionPerformed(ActionEvent e) {
@@ -587,6 +611,23 @@ public class mainWindow extends JFrame {
 		}
 		public void actionPerformed(ActionEvent e) {
 			JOptionPane.showMessageDialog(null, clan.toString());
+		}
+	}
+	private class SwingAction_12 extends AbstractAction {
+		public SwingAction_12() {
+			putValue(NAME, "Player Stats");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			runPlayerStats();
+		}
+	}
+	private class SwingAction_13 extends AbstractAction {
+		public SwingAction_13() {
+			putValue(NAME, "War Stats");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
 		}
 	}
 }
