@@ -61,7 +61,7 @@ public class Player implements Comparable{
 		this.name = name;
 	}
 	public String toString() {
-		return name +  "\n  TownHall: " + thLevel + "\n";
+		return name +  " (" + thLevel + ")\n";
 	}
 	public boolean equals(Object other) {
 		Player playa = (Player) other;
@@ -98,6 +98,8 @@ public class Player implements Comparable{
 	public int compareTo(Object o) {
 		Player other = (Player) o;
 		return (int) (other.getWorth() - this.getWorth());
+			
+		
 	}
 	
 	

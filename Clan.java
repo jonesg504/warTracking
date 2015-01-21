@@ -30,7 +30,7 @@ public class Clan implements Iterable{
 	}
 	public Player getPlayer(String name) {
 		for(Player play : players) {
-			if (play.getName().equals(name)) {
+			if (play.getName().equals(name.toLowerCase())) {
 				return play;
 			}
 		}

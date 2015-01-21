@@ -10,7 +10,13 @@ public class graphData {
 		for (int i = 0; i <= numWars; i++) {
 			war current = file.loadWar(i);
 			current.updateStars();
-			scores.add((double) current.getStars());
+			double starDat = (double)current.getStars();
+			if ( i == 0) {
+				starDat = (59.0/75.0) * 100;
+			} else {
+				starDat = (starDat/(current.getNumPlayers() * 3)) * 100;
+			}
+			scores.add(starDat);
 		}
 		return scores;
 	}

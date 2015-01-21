@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,6 +30,7 @@ import net.miginfocom.swing.MigLayout;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -349,14 +351,20 @@ public class mainWindow extends JFrame {
 	                            JOptionPane.QUESTION_MESSAGE, null, options, null);  
 	          
 	        if (result == JOptionPane.OK_OPTION) {
-	        	saveAttack(clan.getPlayer(username.getText().toLowerCase()), Integer.parseInt(stars.getText()));
-	            double worth = currWar.attack(clan.getPlayer(username.getText().toLowerCase()), Integer.parseInt(defLevel.getText()), Integer.parseInt(stars.getText()) );
-	            editWorth(clan.getPlayer(username.getText()), worth);
-	            save.saveFile(saveList);
-	            currWar = save.loadWar(currentWarNumber);
-	    		txtrHelloMyName.setText("War: "+ currentWarNumber + "\n" + currWar.printWar());
-	    		txtrHelloMyName.setCaretPosition(0);
-	            
+	        	if(clan.getPlayer(username.getText().toLowerCase()) != null) {
+	        		currWar = save.loadWar(currentWarNumber);
+		        	Player play = currWar.getPlayer(username.getText().toLowerCase());
+		        	saveAttack(play, Integer.parseInt(stars.getText()));
+		            double worth = currWar.attack(clan.getPlayer(username.getText().toLowerCase()), Integer.parseInt(defLevel.getText()), Integer.parseInt(stars.getText()) );
+		            editWorth(clan.getPlayer(username.getText()), worth);
+		            save.saveFile(saveList);
+		            currWar = save.loadWar(currentWarNumber);
+		    		txtrHelloMyName.setText("War: "+ currentWarNumber + "\n" + currWar.printWar());
+		    		txtrHelloMyName.setCaretPosition(0);
+	        	} else {
+	        		JOptionPane.showMessageDialog(null, "ERROR: I think you typed the name wrong? Check clan list!");
+	        		i--;
+	        	}
 	        } 
 		}
 	}
@@ -378,11 +386,16 @@ public class mainWindow extends JFrame {
 	                            JOptionPane.QUESTION_MESSAGE, null, options, null);  
 	          
 	        if (result == JOptionPane.OK_OPTION) {
-	            double worth = currWar.defense(clan.getPlayer(username.getText().toLowerCase()), Integer.parseInt(defLevel.getText()), Integer.parseInt(stars.getText()) );
-	            editWorth(clan.getPlayer(username.getText().toLowerCase()), worth);
-	            save.saveFile(saveList);
-	    		txtrHelloMyName.setText("War: "+ currentWarNumber + "\n" + currWar.printWar());
-	    		txtrHelloMyName.setCaretPosition(0);
+	        	if(clan.getPlayer(username.getText().toLowerCase()) != null) {
+		            double worth = currWar.defense(clan.getPlayer(username.getText().toLowerCase()), Integer.parseInt(defLevel.getText()), Integer.parseInt(stars.getText()) );
+		            editWorth(clan.getPlayer(username.getText().toLowerCase()), worth);
+		            save.saveFile(saveList);
+		    		txtrHelloMyName.setText("War: "+ currentWarNumber + "\n" + currWar.printWar());
+		    		txtrHelloMyName.setCaretPosition(0);
+	        	} else {
+	        		JOptionPane.showMessageDialog(null, "ERROR: I think you typed the name wrong? Check clan list!");
+	        		i--;
+	        	}
 	            
 	        } 
 		}
@@ -390,9 +403,8 @@ public class mainWindow extends JFrame {
 	
 	private static void saveAttack(Player player, int stars) {
 		int pointer = saveList.lastIndexOf(player.getName().toLowerCase() + " " + player.getThLevel() + " " + player.getStars() + " " + player.getAttackU() + " " + player.getAttackW());
-		if (pointer  == -1) {
+		if (false) {
 			JOptionPane.showMessageDialog(null, "ERROR: I think you typed the name wrong? Check clan list!");
-			
 		} else {
 			int aU = player.getAttackU() + 1;
 			int aW = player.getAttackW();
@@ -400,6 +412,7 @@ public class mainWindow extends JFrame {
 				aW++;
 			}
 			int star = player.getStars() + stars;
+			System.out.println(player.getAttackU());
 			saveList.set(pointer, player.getName().toLowerCase() + " " + player.getThLevel() + " " + star + " " + aU + " " + aW);
 		}
 	}
@@ -610,7 +623,23 @@ public class mainWindow extends JFrame {
 			putValue(SHORT_DESCRIPTION, "Some short description");
 		}
 		public void actionPerformed(ActionEvent e) {
-			JOptionPane.showMessageDialog(null, clan.toString());
+			ArrayList<Player> sortClan = clan.getList();
+			String text = "";
+			Collections.sort(sortClan, new playerComp());
+			for(Player play : sortClan) {
+				text = text + play.toString();
+			}
+			
+			JTextArea textArea = new JTextArea(text);
+			Font font = new Font("Verdana", Font.BOLD, 20);
+			textArea.setFont(font);
+			textArea.setEditable(false);
+			JScrollPane scrollPane = new JScrollPane(textArea);  
+			textArea.setLineWrap(true);  
+			textArea.setWrapStyleWord(true); 
+			scrollPane.setPreferredSize( new Dimension( 500, 500 ) );
+			JOptionPane.showMessageDialog(null, scrollPane, "dialog test with textarea",  
+			                                       JOptionPane.YES_NO_OPTION);
 		}
 	}
 	private class SwingAction_12 extends AbstractAction {
@@ -628,6 +657,17 @@ public class mainWindow extends JFrame {
 			putValue(SHORT_DESCRIPTION, "Some short description");
 		}
 		public void actionPerformed(ActionEvent e) {
+			JOptionPane.showMessageDialog(null, "Not set up yet :/");
 		}
+	}
+	private class playerComp implements Comparator {
+
+		@Override
+		public int compare(Object a0, Object a1) {
+			Player p1 = (Player)a0;
+			Player p2 = (Player)a1;
+			return (p1.getName().compareToIgnoreCase(p2.getName()));
+		}
+		
 	}
 }

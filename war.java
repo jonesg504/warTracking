@@ -22,6 +22,9 @@ public class war extends Clan {
 	public int getStars() {
 		return totalStars;
 	}
+	public int getNumPlayers() {
+		return super.players.size();
+	}
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}
@@ -66,13 +69,19 @@ public class war extends Clan {
 		if (starsAdded > 0) {
 			player.addAttackW();
 		}
-		double worth = Math.pow(10, opponent - player.getThLevel()) * starsAdded;
+		int multiplier = (opponent - 8) + 1;
+		if (multiplier < 0) {
+			multiplier = 0;
+		}
+		double worth = (Math.pow(10, opponent - player.getThLevel()) * starsAdded) * multiplier;
+		worth = Math.round(worth * 100) / 100;
 		return worth;
 	}
 	
 	public double defense(Player player, int opponent, int starsAdded) {
 		double multiplier = Math.pow(2, -starsAdded);
-		double worth = Math.pow(10, opponent - player.getThLevel()) * multiplier ;
+		double worth = Math.pow(10, opponent - player.getThLevel()) * multiplier;
+		worth = Math.round(worth * 100) / 100;
 		return worth;
 	}
 	

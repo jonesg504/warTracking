@@ -28,7 +28,7 @@ public class playerStats extends JFrame {
 	private static ArrayList<String> saveList; 
 	private static FileHandle save;
 	private static Clan clan;
-	String selected = "None";
+	String selected = "Double Click";
 	
 	/**
 	 * Launch the application.
@@ -53,7 +53,7 @@ public class playerStats extends JFrame {
 		this.saveList = saveList;
 		this.save = save;
 		this.clan = clan;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 611, 427);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
