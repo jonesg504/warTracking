@@ -1,6 +1,8 @@
 package warTracking;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.DefaultListModel;
@@ -18,7 +20,19 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import javax.swing.JLabel;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+
 import java.awt.Font;
 
 public class playerStats extends JFrame {
@@ -80,13 +94,12 @@ public class playerStats extends JFrame {
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblNewLabel.setBounds(274, 11, 144, 33);
 		contentPane.add(lblNewLabel);
-		
+		final int curr = Integer.parseInt(saveList.get(0));
 		MouseListener mouseListener = new MouseAdapter() {
 		    public void mouseClicked(MouseEvent e) {
 		        if (e.getClickCount() == 2) {
 		           String selectedItem = (String) list.getSelectedValue();
-		           System.out.println(selectedItem);
-		           createAndShowGui(selectedItem);
+		           createAndShowGui(selectedItem, curr);
 		           selected = selectedItem;
 		           lblNewLabel.setText(selected);
 		     
@@ -96,12 +109,34 @@ public class playerStats extends JFrame {
 		};
 		list.addMouseListener(mouseListener);
 	}
-	private static void createAndShowGui(String name) {
+	private static void createAndShowGui(String name, int curr) {
 		
-        GraphPanel mainPanel = new GraphPanel(graphData.playerWarStat(clan.getPlayer(name), save, saveList));
-        panel_1.removeAll();
-        mainPanel.setPreferredSize(new Dimension(450, 300));
-        panel_1.add(mainPanel);
+		JFreeChart xylineChart = ChartFactory.createXYLineChart(null,
+				"War Number", "Number of Wasted Attacks",
+				graphData.playerWarStat(clan.getPlayer(name), save, saveList),
+				PlotOrientation.VERTICAL, true, true, false);
+		final ChartPanel chartPanel = new ChartPanel(xylineChart);
+		chartPanel.setPreferredSize(new java.awt.Dimension(450, 280));
+		final XYPlot plot = xylineChart.getXYPlot();
+		ValueAxis yAxis = plot.getRangeAxis();
+		yAxis.setRange(0.0, 7.0);
+		NumberAxis xAxis = new NumberAxis();
+		xAxis.setTickUnit(new NumberTickUnit(1));
+		plot.setDomainAxis(xAxis);
+		xAxis.setRange(1, curr + 1);
+		xAxis.setLabel("War Number");
+		xAxis.setLabelFont(yAxis.getLabelFont());
+		XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+		renderer.setSeriesPaint(0, Color.RED);
+		renderer.setSeriesPaint(1, Color.GREEN);
+		renderer.setSeriesPaint(2, Color.YELLOW);
+		renderer.setSeriesStroke(0, new BasicStroke(4.0f));
+		renderer.setSeriesStroke(1, new BasicStroke(3.0f));
+		renderer.setSeriesStroke(2, new BasicStroke(2.0f));
+		plot.setRenderer(renderer);
+		chartPanel.getChart().removeLegend();
+		panel_1.removeAll();
+        panel_1.add(chartPanel);
         panel_1.validate();
     }
 	private static String[] populate(Clan clan) {

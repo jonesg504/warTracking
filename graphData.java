@@ -3,62 +3,73 @@ package warTracking;
 import java.awt.List;
 import java.util.ArrayList;
 
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
 public class graphData {
-	public static ArrayList<Double> performance(FileHandle file, ArrayList<String> saveList) {
-		int numWars = Integer.parseInt(saveList.get(0));
-		ArrayList<Double> scores = new ArrayList<Double>();
-		for (int i = 0; i <= numWars; i++) {
-			war current = file.loadWar(i);
-			current.updateStars();
-			double starDat = (double)current.getStars();
-			if ( i == 0) {
-				starDat = (59.0/75.0) * 100;
-			} else {
-				starDat = (starDat/(current.getNumPlayers() * 3)) * 100;
+	public static XYSeriesCollection performance(FileHandle file, ArrayList<String> saveList) {
+		 final XYSeries sample = new XYSeries("Firefox");   
+		  int numWars = Integer.parseInt(saveList.get(0));
+			for (int i = 0; i <= numWars; i++) {
+				
+				war current = file.loadWar(i);
+				current.updateStars();
+				sample.add((double)i + 1, current.getStars());
 			}
-			scores.add(starDat);
-		}
-		return scores;
+	      final XYSeriesCollection dataset = new XYSeriesCollection( );          
+	      dataset.addSeries( sample );          
+	      
+	      return dataset;
 	}
-	public static ArrayList<Double> parting(FileHandle file, ArrayList<String> saveList) {
-		int numWars = Integer.parseInt(saveList.get(0));
-		ArrayList<Double> scores = new ArrayList<Double>();
-		for (int i = 0; i <= numWars; i++) {
-			war current = file.loadWar(i);
-			scores.add((double) current.parting());
-		}
-		return scores;
+	public static XYSeriesCollection parting(FileHandle file, ArrayList<String> saveList) {
+		final XYSeries sample = new XYSeries("Firefox");   
+		  int numWars = Integer.parseInt(saveList.get(0));
+			for (int i = 0; i <= numWars; i++) {
+				
+				war current = file.loadWar(i);
+				current.updateStars();
+				sample.add((double)i + 1, current.parting());
+			}
+	      final XYSeriesCollection dataset = new XYSeriesCollection( );          
+	      dataset.addSeries( sample );          
+	      
+	      return dataset;
 	}
-	public static ArrayList<Double> losses(FileHandle file, ArrayList<String> saveList) {
-		int numWars = Integer.parseInt(saveList.get(0));
-		ArrayList<Double> scores = new ArrayList<Double>();
-		for (int i = 0; i <= numWars; i++) {
-			war current = file.loadWar(i);
-			scores.add((double) current.losing());
-		}
-		return scores;
+	public static XYSeriesCollection losses(FileHandle file, ArrayList<String> saveList) {
+		final XYSeries sample = new XYSeries("Firefox");   
+		  int numWars = Integer.parseInt(saveList.get(0));
+			for (int i = 0; i <= numWars; i++) {
+				
+				war current = file.loadWar(i);
+				current.updateStars();
+				sample.add((double)i + 1, current.losing());
+			}
+	      final XYSeriesCollection dataset = new XYSeriesCollection( );          
+	      dataset.addSeries( sample );          
+	      
+	      return dataset;
 	}
-	public static ArrayList<Double> playerWarStat(Player player, FileHandle file, ArrayList<String> saveList) {
+	public static XYSeriesCollection playerWarStat(Player player, FileHandle file, ArrayList<String> saveList) {
 		boolean clanList = true;
-		ArrayList<Double> list = new ArrayList<Double>();
+		final XYSeries sample = new XYSeries("Firefox");
+		int i = 1;
 		for(String str : saveList) {
 			if(str.contains(player.getName())) {
 				if (clanList) {
 					clanList = false;
 				} else {
 					String[] values = str.split("\\s");
-//					System.out.println(values[0]);
-//					System.out.println(values[1]);
-//					System.out.println(values[2]);
-//					System.out.println(values[3]);
 					int stars = Integer.parseInt(values[2]);
 					int attacksUsed = Integer.parseInt(values[3]);
-					list.add((double) stars);
+					sample.add((double)i, stars);
+					i++;
 				}
 			}
 		}
+		final XYSeriesCollection dataset = new XYSeriesCollection( ); 
+		dataset.addSeries( sample );   
+		return dataset;
 		
-		
-		return list;
 	}
 }

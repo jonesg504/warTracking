@@ -73,15 +73,15 @@ public class war extends Clan {
 		if (multiplier < 0) {
 			multiplier = 0;
 		}
-		double worth = (Math.pow(10, opponent - player.getThLevel()) * starsAdded) * multiplier;
-		worth = Math.round(worth * 100) / 100;
+		double worth = (Math.pow(2, opponent - player.getThLevel()) * starsAdded) * multiplier;
+		worth = Math.round(worth * 100);
 		return worth;
 	}
 	
 	public double defense(Player player, int opponent, int starsAdded) {
 		double multiplier = Math.pow(2, -starsAdded);
-		double worth = Math.pow(10, opponent - player.getThLevel()) * multiplier;
-		worth = Math.round(worth * 100) / 100;
+		double worth = Math.pow(2, opponent - player.getThLevel()) * multiplier;
+		worth = Math.round(worth * 100);
 		return worth;
 	}
 	
