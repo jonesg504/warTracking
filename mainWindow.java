@@ -68,6 +68,7 @@ public class mainWindow extends JFrame {
 	private final Action action_11 = new SwingAction_11();
 	private final Action action_12 = new SwingAction_12();
 	private final Action action_13 = new SwingAction_13();
+	private final Action action_14 = new SwingAction_14();
 	/**
 	 * Launch the application.
 	 */
@@ -145,6 +146,10 @@ public class mainWindow extends JFrame {
 		});
 		btnNewButton_11.setAction(action_11);
 		panel_1.add(btnNewButton_11);
+		
+		JButton btnNewButton_14 = new JButton("New button");
+		btnNewButton_14.setAction(action_14);
+		panel_1.add(btnNewButton_14);
 		
 		JPanel panel_2 = new JPanel();
 		contentPane.add(panel_2, BorderLayout.WEST);
@@ -669,5 +674,32 @@ public class mainWindow extends JFrame {
 			return (p1.getName().compareToIgnoreCase(p2.getName()));
 		}
 		
+	}
+	private class SwingAction_14 extends AbstractAction {
+		public SwingAction_14() {
+			putValue(NAME, "Clan Rankings");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+			ArrayList<Player> sortClan = clan.getList();
+			String text = "";
+			Collections.sort(sortClan);
+			int i = 1;
+			for(Player play : sortClan) {
+				text = text + i + ") " + play.toString();
+				i++;
+			}
+			
+			JTextArea textArea = new JTextArea(text);
+			Font font = new Font("Verdana", Font.BOLD, 20);
+			textArea.setFont(font);
+			textArea.setEditable(false);
+			JScrollPane scrollPane = new JScrollPane(textArea);  
+			textArea.setLineWrap(true);  
+			textArea.setWrapStyleWord(true); 
+			scrollPane.setPreferredSize( new Dimension( 500, 500 ) );
+			JOptionPane.showMessageDialog(null, scrollPane, "dialog test with textarea",  
+			                                       JOptionPane.YES_NO_OPTION);
+		}
 	}
 }
