@@ -3,6 +3,7 @@ package warTracking;
 import java.awt.List;
 import java.util.ArrayList;
 
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -43,16 +44,19 @@ public class graphData {
 	      return dataset;
 	}
 	public static XYSeriesCollection losses(FileHandle file, ArrayList<String> saveList) {
-		final XYSeries sample = new XYSeries("Firefox");   
+		final XYSeries sample = new XYSeries("Losses");   
+		//final XYSeries wins = new XYSeries("Wins");   
 		  int numWars = Integer.parseInt(saveList.get(0));
 			for (int i = 0; i <= numWars; i++) {
 				
 				war current = file.loadWar(i);
 				current.updateStars();
 				sample.add((double)i + 1, current.losing());
+				//wins.add((double)i + 1, current.winning());
 			}
 	      final XYSeriesCollection dataset = new XYSeriesCollection( );          
-	      dataset.addSeries( sample );          
+	      dataset.addSeries(sample);
+	      //dataset.addSeries(wins);
 	      
 	      return dataset;
 	}
@@ -78,4 +82,5 @@ public class graphData {
 		return dataset;
 		
 	}
+	
 }

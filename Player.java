@@ -8,6 +8,7 @@ public class Player implements Comparable{
 	private double worth = 0;
 	private int attackU = 0;
 	private int attackW = 0;
+	private int rank; 
 	public Player (String name, int stars, int thLevel) {
 		this.name = name.toLowerCase();
 		this.stars = stars;
@@ -20,20 +21,33 @@ public class Player implements Comparable{
 		this.attackU = attackU;
 		this.attackW = attackW;
 	}
+	public Player (String name, int stars, int thLevel, int attackU, int attackW, int rank) {
+		this.name = name.toLowerCase();
+		this.stars = stars;
+		this.thLevel = thLevel;
+		this.attackU = attackU;
+		this.attackW = attackW;
+		this.setRank(rank);
+	}
 	public Player (String name, int thLevel, double worth) {
+		this(name, thLevel, worth, 51);
+	}
+	public Player (String name, int thLevel, double worth, int rank) {
 		this.name = name.toLowerCase();
 		this.setWorth(worth);
 		this.thLevel = thLevel;
+		this.rank = rank;
+		stars = 0;
 	}
 	public Player (String name, int thLevel) {
-		this.name = name.toLowerCase();
-		stars = 0;
-		this.thLevel = thLevel;
+		this(name, thLevel, -1.0, 51);
 	}
 	public Player (String name) {
 		this.name = name.toLowerCase();
 		stars = 0;
 		this.thLevel = 0;
+		this.worth = -1.0;
+		this.rank = 51;
 	}
 	public int getThLevel() {
 		return thLevel;
@@ -100,6 +114,12 @@ public class Player implements Comparable{
 		return (int) (other.getWorth() - this.getWorth());
 			
 		
+	}
+	public int getRank() {
+		return rank;
+	}
+	public void setRank(int rank) {
+		this.rank = rank;
 	}
 	
 	

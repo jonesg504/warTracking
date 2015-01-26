@@ -91,6 +91,7 @@ public class mainWindow extends JFrame {
 	public static void main(String[] args) {
 		saveList = save.loadFile();
 		clan = save.loadClan();
+		System.out.println(clan);
 		sortedClan = clan.getList();
 		Collections.sort(sortedClan);
 		currentWarNumber = Integer.parseInt(saveList.get(0));
@@ -239,8 +240,8 @@ public class mainWindow extends JFrame {
 
 		txtrHelloMyName.setLineWrap(true);
 		currWar = save.loadWar(currentWarNumber);
-		txtrHelloMyName.setText("War: " + currentWarNumber + "\n"
-				+ currWar.printWar());
+		txtrHelloMyName.setText("War: " + (currentWarNumber + 1) + "\n"
+				+ currWar.toString());
 		scrollPane.setViewportView(txtrHelloMyName);
 	}
 
@@ -267,14 +268,31 @@ public class mainWindow extends JFrame {
 			}
 		});
 	}
+	private static void runWarStats() {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					warStats frame = new warStats(clan, saveList, save);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	private static void setWorst() {
 		Collections.sort(sortedClan);
 		int s = sortedClan.size() - 1;
 		worstPlayers = "Bottom Members: \n";
 		for (int i = s; i > s - 5; i--) {
+			if (sortedClan.get(i).getWorth() != -1) {
+				
 			worstPlayers = worstPlayers + (i + 1) + ") "
 					+ sortedClan.get(i).getName() + "\n";
+			} else {
+				s--;
+			}
 		}
 		txtrWorstPlayers.setText(worstPlayers);
 	}
@@ -297,7 +315,7 @@ public class mainWindow extends JFrame {
 			NumberAxis xAxis = new NumberAxis();
 			xAxis.setTickUnit(new NumberTickUnit(1));
 			plot.setDomainAxis(xAxis);
-			xAxis.setRange(1, currentWarNumber + 1);
+			xAxis.setRange(1, Integer.parseInt(saveList.get(0)) + 1);
 			xAxis.setLabel("War Number");
 			xAxis.setLabelFont(yAxis.getLabelFont());
 			XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
@@ -326,7 +344,7 @@ public class mainWindow extends JFrame {
 			NumberAxis xAxis = new NumberAxis();
 			xAxis.setTickUnit(new NumberTickUnit(1));
 			plot.setDomainAxis(xAxis);
-			xAxis.setRange(1, currentWarNumber + 1);
+			xAxis.setRange(1, Integer.parseInt(saveList.get(0)) + 1);
 			xAxis.setLabel("War Number");
 			xAxis.setLabelFont(yAxis.getLabelFont());
 			XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
@@ -355,7 +373,7 @@ public class mainWindow extends JFrame {
 			NumberAxis xAxis = new NumberAxis();
 			xAxis.setTickUnit(new NumberTickUnit(1));
 			plot.setDomainAxis(xAxis);
-			xAxis.setRange(1, currentWarNumber + 1);
+			xAxis.setRange(1, Integer.parseInt(saveList.get(0)) + 1);
 			xAxis.setLabel("War Number");
 			xAxis.setLabelFont(yAxis.getLabelFont());
 			XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
@@ -366,7 +384,6 @@ public class mainWindow extends JFrame {
 			renderer.setSeriesStroke(1, new BasicStroke(3.0f));
 			renderer.setSeriesStroke(2, new BasicStroke(2.0f));
 			plot.setRenderer(renderer);
-			chartPanel.getChart().removeLegend();
 			panel_5.remove(0);
 			panel_5.add(chartPanel);
 			panel_5.repaint();
@@ -425,17 +442,14 @@ public class mainWindow extends JFrame {
 
 	private static void editWorth(Player player, double worth) {
 		int pointer = saveList.indexOf(player.getName().toLowerCase() + " "
-				+ player.getThLevel() + " " + player.getWorth());
-		System.out.println(player.getName().toLowerCase() + " "
-				+ player.getThLevel() + " " + player.getStars() + " "
-				+ player.getAttackU() + " " + player.getAttackW());
-		player.addWorth(worth);
+				+ player.getThLevel() + " " + player.getWorth() + " " + player.getRank());
 		
+
+		player.addWorth(worth);
 		saveList.set(pointer,
 				player.getName().toLowerCase() + " " + player.getThLevel()
-						+ " " + player.getWorth());
+						+ " " + player.getWorth() + " " + player.getRank());
 		Collections.sort(sortedClan);
-		setBest();
 		setWorst();
 
 	}
@@ -448,13 +462,16 @@ public class mainWindow extends JFrame {
 			final JTextField username = new JTextField(10);
 			final JTextField defLevel = new JTextField(10);
 			final JTextField stars = new JTextField(10);
-			final JPanel panel = new JPanel(new GridLayout(6, 1));
+			final JTextField rank = new JTextField(10);
+			final JPanel panel = new JPanel(new GridLayout(8, 1));
 			panel.add(new JLabel("Attacker:"));
 			panel.add(username);
 			panel.add(new JLabel("Bonus Stars:"));
 			panel.add(stars);
 			panel.add(new JLabel("Defender TownHall Level: "));
 			panel.add(defLevel);
+			panel.add(new JLabel("Opponent Rank: "));
+			panel.add(rank);
 			Object[] options = { "OK", "Cancel" };
 			int result = JOptionPane.showOptionDialog(null, panel,
 					"Data Entry", JOptionPane.OK_CANCEL_OPTION,
@@ -469,12 +486,13 @@ public class mainWindow extends JFrame {
 					double worth = currWar.attack(
 							clan.getPlayer(username.getText().toLowerCase()),
 							Integer.parseInt(defLevel.getText()),
-							Integer.parseInt(stars.getText()));
+							Integer.parseInt(stars.getText()),
+							Integer.parseInt(rank.getText()));
 					editWorth(clan.getPlayer(username.getText()), worth);
 					save.saveFile(saveList);
 					currWar = save.loadWar(currentWarNumber);
 					txtrHelloMyName.setText("War: " + currentWarNumber + "\n"
-							+ currWar.printWar());
+							+ currWar.toString());
 					txtrHelloMyName.setCaretPosition(0);
 				} else {
 					JOptionPane
@@ -516,7 +534,7 @@ public class mainWindow extends JFrame {
 							worth);
 					save.saveFile(saveList);
 					txtrHelloMyName.setText("War: " + currentWarNumber + "\n"
-							+ currWar.printWar());
+							+ currWar.toString());
 					txtrHelloMyName.setCaretPosition(0);
 				} else {
 					JOptionPane
@@ -573,7 +591,7 @@ public class mainWindow extends JFrame {
 		save.saveFile(saveList);
 		currentWarNumber++;
 		txtrHelloMyName.setText("War: " + currentWarNumber + "\n"
-				+ currWar.printWar());
+				+ currWar.toString());
 		currentWarNumber = Integer.parseInt(saveList.get(0));
 		txtrHelloMyName.setCaretPosition(0);
 
@@ -603,8 +621,8 @@ public class mainWindow extends JFrame {
 		} else {
 			currWar = save.loadWar(currentWarNumber - 1);
 			currentWarNumber--;
-			txtrHelloMyName.setText("War: " + currentWarNumber + "\n"
-					+ currWar.printWar());
+			txtrHelloMyName.setText("War: " + (currentWarNumber + 1) + "\n"
+					+ currWar.toString());
 			txtrHelloMyName.setCaretPosition(0);
 
 		}
@@ -616,8 +634,8 @@ public class mainWindow extends JFrame {
 		} else {
 			currWar = save.loadWar(currentWarNumber + 1);
 			currentWarNumber++;
-			txtrHelloMyName.setText("War: " + currentWarNumber + "\n"
-					+ currWar.printWar());
+			txtrHelloMyName.setText("War: " + (currentWarNumber + 1) + "\n"
+					+ currWar.toString());
 			txtrHelloMyName.setCaretPosition(0);
 		}
 	}
@@ -649,12 +667,15 @@ public class mainWindow extends JFrame {
 		for (int i = 0; i < num; i++) {
 			final JTextField defLevel = new JTextField(10);
 			final JTextField stars = new JTextField(10);
-			final JPanel panel = new JPanel(new GridLayout(5, 1));
+			final JTextField rank = new JTextField(10);
+			final JPanel panel = new JPanel(new GridLayout(7, 1));
 			panel.add(new JLabel("Attack " + (i + 1)));
 			panel.add(new JLabel("Added Stars:"));
 			panel.add(stars);
 			panel.add(new JLabel("Attacker TownHall Level: "));
 			panel.add(defLevel);
+			panel.add(new JLabel("Opponent Rank: "));
+			panel.add(rank);
 			Object[] options = { "OK", "Cancel" };
 			int result = JOptionPane.showOptionDialog(null, panel,
 					"Data Entry", JOptionPane.OK_CANCEL_OPTION,
@@ -664,7 +685,8 @@ public class mainWindow extends JFrame {
 				saveAttack(player, Integer.parseInt(stars.getText()));
 				double worth = currWar.attack(player,
 						Integer.parseInt(defLevel.getText()),
-						Integer.parseInt(stars.getText()));
+						Integer.parseInt(stars.getText()),
+						Integer.parseInt(rank.getText()));
 				save.saveFile(saveList);
 				player = clan.getPlayer(name);
 				System.out.println(player.getWorth());
@@ -672,7 +694,7 @@ public class mainWindow extends JFrame {
 				
 				currWar = save.loadWar(currentWarNumber);
 				txtrHelloMyName.setText("War: " + currentWarNumber + "\n"
-						+ currWar.printWar());
+						+ currWar.toString());
 				txtrHelloMyName.setCaretPosition(0);
 
 			}
@@ -684,7 +706,7 @@ public class mainWindow extends JFrame {
 	private class SwingAction extends AbstractAction {
 		public SwingAction() {
 			putValue(NAME, "Performance");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "Performance of the clan");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -695,7 +717,7 @@ public class mainWindow extends JFrame {
 	private class SwingAction_1 extends AbstractAction {
 		public SwingAction_1() {
 			putValue(NAME, "Participation");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "Participation of the clan through wars");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -705,8 +727,8 @@ public class mainWindow extends JFrame {
 
 	private class SwingAction_2 extends AbstractAction {
 		public SwingAction_2() {
-			putValue(NAME, "Attacks Lost");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(NAME, "Wasted Attacks");
+			putValue(SHORT_DESCRIPTION, "Show Wasted attacks");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -717,7 +739,7 @@ public class mainWindow extends JFrame {
 	private class SwingAction_3 extends AbstractAction {
 		public SwingAction_3() {
 			putValue(NAME, "New Player(s)");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "Add a new player or players");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -728,7 +750,7 @@ public class mainWindow extends JFrame {
 	private class SwingAction_4 extends AbstractAction {
 		public SwingAction_4() {
 			putValue(NAME, "Remove Player(s)");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "Remove players from clan");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -740,7 +762,7 @@ public class mainWindow extends JFrame {
 	private class SwingAction_5 extends AbstractAction {
 		public SwingAction_5() {
 			putValue(NAME, "Add Attack");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "Add an attack to the current war");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -751,7 +773,7 @@ public class mainWindow extends JFrame {
 	private class SwingAction_6 extends AbstractAction {
 		public SwingAction_6() {
 			putValue(NAME, "New War");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "Start a new war");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -762,7 +784,7 @@ public class mainWindow extends JFrame {
 	private class SwingAction_7 extends AbstractAction {
 		public SwingAction_7() {
 			putValue(NAME, "Prev War");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "Show Previous war");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -773,7 +795,7 @@ public class mainWindow extends JFrame {
 	private class SwingAction_8 extends AbstractAction {
 		public SwingAction_8() {
 			putValue(NAME, "Next War");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "Show next war");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -784,7 +806,7 @@ public class mainWindow extends JFrame {
 	private class SwingAction_9 extends AbstractAction {
 		public SwingAction_9() {
 			putValue(NAME, "Add Defense");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "Add a defense");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -795,7 +817,7 @@ public class mainWindow extends JFrame {
 	private class SwingAction_10 extends AbstractAction {
 		public SwingAction_10() {
 			putValue(NAME, "Edit Attack");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "Edit someones attacks");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -806,7 +828,7 @@ public class mainWindow extends JFrame {
 	private class SwingAction_11 extends AbstractAction {
 		public SwingAction_11() {
 			putValue(NAME, "Clan List");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "Show everyone in the clan");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -833,7 +855,7 @@ public class mainWindow extends JFrame {
 	private class SwingAction_12 extends AbstractAction {
 		public SwingAction_12() {
 			putValue(NAME, "Player Stats");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "Individual player stats");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -843,12 +865,27 @@ public class mainWindow extends JFrame {
 
 	private class SwingAction_13 extends AbstractAction {
 		public SwingAction_13() {
-			putValue(NAME, "War Stats");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(NAME, "War Ranks");
+			putValue(SHORT_DESCRIPTION, "Not set up yet");
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			JOptionPane.showMessageDialog(null, "Not set up yet :/");
+			ArrayList<Player> sortClan = clan.getList();
+			String text = "";
+			Collections.sort(sortClan, new rankComp());
+			for (Player play : sortClan) {
+				text = text + play.getRank() + ") " + play.toString();
+			}
+			JTextArea textArea = new JTextArea(text);
+			Font font = new Font("Verdana", Font.BOLD, 20);
+			textArea.setFont(font);
+			textArea.setEditable(false);
+			JScrollPane scrollPane = new JScrollPane(textArea);
+			textArea.setLineWrap(true);
+			textArea.setWrapStyleWord(true);
+			scrollPane.setPreferredSize(new Dimension(500, 500));
+			JOptionPane.showMessageDialog(null, scrollPane,
+					"dialog test with textarea", JOptionPane.YES_NO_OPTION);
 		}
 	}
 
@@ -862,11 +899,22 @@ public class mainWindow extends JFrame {
 		}
 
 	}
+	private class rankComp implements Comparator {
+
+		@Override
+		public int compare(Object a0, Object a1) {
+			Player p1 = (Player) a0;
+			Player p2 = (Player) a1;
+			return p1.getRank() - p2.getRank();
+		}
+
+	}
+
 
 	private class SwingAction_14 extends AbstractAction {
 		public SwingAction_14() {
 			putValue(NAME, "Clan Rankings");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "Clan rankings");
 		}
 
 		public void actionPerformed(ActionEvent e) {

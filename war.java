@@ -62,8 +62,18 @@ public class war extends Clan {
 		}
 		return losses;
 	}
-	public double attack(Player player, int opponent, int starsAdded) {
+	public double winning() {
+		double wins = 0;
+		for (Player play : super.players) {
+			wins += play.getAttackW();
+		}
+		return wins;
+	}
+	public double attack(Player player, int opponent, int starsAdded, int oppRank) {
 		player.addStars(starsAdded);
+		double nop = this.getNumPlayers();
+		double modifier = 1.0 + ((nop - oppRank)/nop) + (player.getRank() / oppRank);
+		modifier =  1 + Math.log10(modifier);
 		totalStars += starsAdded;
 		player.addAttackU();
 		if (starsAdded > 0) {
@@ -74,10 +84,22 @@ public class war extends Clan {
 			multiplier = 0;
 		}
 		double worth = (Math.pow(2, opponent - player.getThLevel()) * starsAdded) * multiplier;
+		System.out.println(worth);
+		worth = worth * modifier;
+		System.out.println(worth);
 		worth = Math.round(worth * 100);
 		return worth;
 	}
-	
+	public String toString() {
+		String warString = "";
+		warString += "Attacks Won: " + this.winning();
+		warString += "\nAttacks Lost: " + this.losing();
+		this.updateStars();
+		warString += "\nStars: " + this.getStars();
+		
+		
+		return warString;
+	}
 	public double defense(Player player, int opponent, int starsAdded) {
 		double multiplier = Math.pow(2, -starsAdded);
 		double worth = Math.pow(2, opponent - player.getThLevel()) * multiplier;

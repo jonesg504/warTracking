@@ -79,7 +79,7 @@ public class FileHandle {
 					break;
 				}
 				String[] profile = line.split("\\s");
-				loadClan.add(new Player(profile[0], Integer.parseInt(profile[1]), Double.parseDouble(profile[2])));
+				loadClan.add(new Player(profile[0], Integer.parseInt(profile[1]), Double.parseDouble(profile[2]), Integer.parseInt(profile[3])));
 				line = textReader.readLine();
 			}
 			fr.close();

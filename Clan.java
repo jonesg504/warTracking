@@ -13,7 +13,7 @@ public class Clan implements Iterable{
 	public String toString() {
 		String clanString = "";
 		for (int i = 0; i < players.size(); i++) {
-			clanString = clanString + players.get(i).toString();
+			clanString = clanString + players.get(i).toString() + "Rank: " + players.get(i).getRank() + "\n";
 		}
 		return clanString;
 	}

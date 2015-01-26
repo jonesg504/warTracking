@@ -1,27 +1,19 @@
 package warTracking;
 
 import java.awt.BasicStroke;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JList;
-import javax.swing.ListSelectionModel;
-
-import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -33,9 +25,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 
-import java.awt.Font;
-
-public class playerStats extends JFrame {
+public class warStats extends JFrame {
 
 	private JPanel contentPane;
 	private static JPanel panel_1 = new JPanel();
@@ -63,7 +53,7 @@ public class playerStats extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public playerStats(Clan clan, ArrayList<String> saveList, FileHandle save) {
+	public warStats(Clan clan, ArrayList<String> saveList, FileHandle save) {
 		this.saveList = saveList;
 		this.save = save;
 		this.clan = clan;
@@ -112,7 +102,7 @@ public class playerStats extends JFrame {
 	private static void createAndShowGui(String name, int curr) {
 		
 		JFreeChart xylineChart = ChartFactory.createXYLineChart(null,
-				"War Number", "Stars Gotten",
+				"War Number", "Number of Wasted Attacks",
 				graphData.playerWarStat(clan.getPlayer(name), save, saveList),
 				PlotOrientation.VERTICAL, true, true, false);
 		final ChartPanel chartPanel = new ChartPanel(xylineChart);
