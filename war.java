@@ -19,7 +19,7 @@ public class war extends Clan {
 			totalStars += play.getStars();
 		}
 	}
-	public int getStars() {
+	public double getStars() {
 		return totalStars;
 	}
 	public int getNumPlayers() {

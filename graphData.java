@@ -15,7 +15,13 @@ public class graphData {
 				
 				war current = file.loadWar(i);
 				current.updateStars();
-				sample.add((double)i + 1, current.getStars());
+				double starDat = current.getStars();
+				if ( i == 0) {
+					sample.add(i + 1, (59.0/75.0) * 100);
+				} else {
+					sample.add(i + 1, (starDat/(current.getNumPlayers() * 3)) * 100);
+				}
+				
 			}
 	      final XYSeriesCollection dataset = new XYSeriesCollection( );          
 	      dataset.addSeries( sample );          
