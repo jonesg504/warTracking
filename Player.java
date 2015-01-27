@@ -75,7 +75,7 @@ public class Player implements Comparable{
 		this.name = name;
 	}
 	public String toString() {
-		return name +  " (" + thLevel + ")\n";
+		return name + "\n";
 	}
 	public boolean equals(Object other) {
 		Player playa = (Player) other;

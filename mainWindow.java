@@ -241,7 +241,7 @@ public class mainWindow extends JFrame {
 		txtrHelloMyName.setLineWrap(true);
 		currWar = save.loadWar(currentWarNumber);
 		txtrHelloMyName.setText("War: " + (currentWarNumber + 1) + "\n"
-				+ currWar.toString());
+				+ currWar.toString() + "\n" + topAttackers());
 		scrollPane.setViewportView(txtrHelloMyName);
 	}
 
@@ -384,6 +384,7 @@ public class mainWindow extends JFrame {
 			renderer.setSeriesStroke(1, new BasicStroke(3.0f));
 			renderer.setSeriesStroke(2, new BasicStroke(2.0f));
 			plot.setRenderer(renderer);
+			chartPanel.getChart().removeLegend();
 			panel_5.remove(0);
 			panel_5.add(chartPanel);
 			panel_5.repaint();
@@ -433,7 +434,17 @@ public class mainWindow extends JFrame {
 			}
 		}
 	}
-
+	private static String topAttackers() {
+		ArrayList<Player> warPlay = currWar.getMembers();
+		Collections.sort(warPlay, new starComp());
+		String list = "\nTop Attackers: \n";
+		for (int i = 0; i < 10; i++) {
+			Player player = warPlay.get(i);
+			list += (i + 1) + ") " + player.getName() + "(" + player.getStars() + ")\n";
+		}
+		return list;
+		
+	}
 	private static void savePlayer(Player player) {
 		saveList.add(3,
 				player.getName().toLowerCase() + " " + player.getThLevel()
@@ -452,6 +463,19 @@ public class mainWindow extends JFrame {
 		Collections.sort(sortedClan);
 		setWorst();
 
+	}
+	static void saveRanks(String name, int rank) {
+		Player player = clan.getPlayer(name);
+		System.out.println(player.getName().toLowerCase() + " "
+				+ player.getThLevel() + " " + player.getWorth() + " " + player.getRank());
+		int pointer = saveList.indexOf(player.getName().toLowerCase() + " "
+				+ player.getThLevel() + " " + player.getWorth() + " " + player.getRank());
+		player.setRank(rank);
+		saveList.set(pointer,
+				player.getName().toLowerCase() + " " + player.getThLevel()
+						+ " " + player.getWorth() + " " + player.getRank());
+		
+		save.saveFile(saveList);
 	}
 
 	private static void addAttack() {
@@ -492,7 +516,7 @@ public class mainWindow extends JFrame {
 					save.saveFile(saveList);
 					currWar = save.loadWar(currentWarNumber);
 					txtrHelloMyName.setText("War: " + currentWarNumber + "\n"
-							+ currWar.toString());
+							+ currWar.toString() + "\n" + topAttackers());
 					txtrHelloMyName.setCaretPosition(0);
 				} else {
 					JOptionPane
@@ -534,7 +558,7 @@ public class mainWindow extends JFrame {
 							worth);
 					save.saveFile(saveList);
 					txtrHelloMyName.setText("War: " + currentWarNumber + "\n"
-							+ currWar.toString());
+							+ currWar.toString() + "\n" + topAttackers());
 					txtrHelloMyName.setCaretPosition(0);
 				} else {
 					JOptionPane
@@ -546,100 +570,6 @@ public class mainWindow extends JFrame {
 			}
 		}
 	}
-
-	private static void saveAttack(Player player, int stars) {
-		int pointer = saveList.lastIndexOf(player.getName().toLowerCase() + " "
-				+ player.getThLevel() + " " + player.getStars() + " "
-				+ player.getAttackU() + " " + player.getAttackW());
-		if (false) {
-			JOptionPane
-					.showMessageDialog(null,
-							"ERROR: I think you typed the name wrong? Check clan list!");
-		} else {
-			int aU = player.getAttackU() + 1;
-			int aW = player.getAttackW();
-			if (stars > 0) {
-				aW++;
-			}
-			int star = player.getStars() + stars;
-			System.out.println(player.getAttackU());
-			saveList.set(pointer,
-					player.getName().toLowerCase() + " " + player.getThLevel()
-							+ " " + star + " " + aU + " " + aW);
-		}
-	}
-
-	private static void addWar() {
-		Clan tempClan = clan;
-		int num = Integer
-				.parseInt(JOptionPane
-						.showInputDialog("How many people aren't participating?(Integer plz)"));
-		for (int i = 0; i < num; i++) {
-			String removed = JOptionPane.showInputDialog("Enter Name:")
-					.toLowerCase();
-			Player gone = tempClan.remove(new Player(removed));
-			if (gone == null) {
-				JOptionPane.showMessageDialog(null, "Player Doesn't Exist");
-				i--;
-			}
-		}
-
-		currWar = new war(tempClan.getMembers().toArray(new Player[1]));
-		currWar.resetPlayers();
-		addWarSave();
-		saveList.set(0, "" + (Integer.parseInt(saveList.get(0)) + 1));
-		save.saveFile(saveList);
-		currentWarNumber++;
-		txtrHelloMyName.setText("War: " + currentWarNumber + "\n"
-				+ currWar.toString());
-		currentWarNumber = Integer.parseInt(saveList.get(0));
-		txtrHelloMyName.setCaretPosition(0);
-
-	}
-
-	private static void addWarSave() {
-		int pointer = saveList.lastIndexOf("war" + saveList.get(0) + "End");
-		pointer++;
-		saveList.add(pointer, "");
-		pointer++;
-		saveList.add(pointer, "war" + (Integer.parseInt(saveList.get(0)) + 1));
-		for (Object play : currWar) {
-			pointer++;
-			Player p = (Player) play;
-			saveList.add(pointer,
-					p.getName() + " " + p.getThLevel() + " " + p.getStars()
-							+ " " + p.getAttackU() + " " + p.getAttackW());
-		}
-		pointer++;
-		saveList.add(pointer, "war" + (Integer.parseInt(saveList.get(0)) + 1)
-				+ "End");
-	}
-
-	private static void loadPreviousWar() {
-		if (currentWarNumber <= 0) {
-			JOptionPane.showMessageDialog(null, "ALREADY ON EARLIEST WAR");
-		} else {
-			currWar = save.loadWar(currentWarNumber - 1);
-			currentWarNumber--;
-			txtrHelloMyName.setText("War: " + (currentWarNumber + 1) + "\n"
-					+ currWar.toString());
-			txtrHelloMyName.setCaretPosition(0);
-
-		}
-	}
-
-	private static void loadNextWar() {
-		if (currentWarNumber >= Integer.parseInt(saveList.get(0))) {
-			JOptionPane.showMessageDialog(null, "ALREADY ON CURRENT WAR");
-		} else {
-			currWar = save.loadWar(currentWarNumber + 1);
-			currentWarNumber++;
-			txtrHelloMyName.setText("War: " + (currentWarNumber + 1) + "\n"
-					+ currWar.toString());
-			txtrHelloMyName.setCaretPosition(0);
-		}
-	}
-
 	private static void editAttack() {
 		String name = JOptionPane.showInputDialog("Who's Attacks?");
 		String choice = JOptionPane
@@ -694,13 +624,123 @@ public class mainWindow extends JFrame {
 				
 				currWar = save.loadWar(currentWarNumber);
 				txtrHelloMyName.setText("War: " + currentWarNumber + "\n"
-						+ currWar.toString());
+						+ currWar.toString() + "\n" + topAttackers());
 				txtrHelloMyName.setCaretPosition(0);
 
 			}
 		}
 	}
 
+
+	private static void saveAttack(Player player, int stars) {
+		int pointer = saveList.lastIndexOf(player.getName().toLowerCase() + " "
+				+ player.getThLevel() + " " + player.getStars() + " "
+				+ player.getAttackU() + " " + player.getAttackW());
+		if (false) {
+			JOptionPane
+					.showMessageDialog(null,
+							"ERROR: I think you typed the name wrong? Check clan list!");
+		} else {
+			int aU = player.getAttackU() + 1;
+			int aW = player.getAttackW();
+			if (stars > 0) {
+				aW++;
+			}
+			int star = player.getStars() + stars;
+			System.out.println(player.getAttackU());
+			saveList.set(pointer,
+					player.getName().toLowerCase() + " " + player.getThLevel()
+							+ " " + star + " " + aU + " " + aW);
+		}
+	}
+
+	private static void addWar() {
+		Clan tempClan = clan;
+		int num = Integer
+				.parseInt(JOptionPane
+						.showInputDialog("How many people aren't participating?(Integer plz)"));
+		for (int i = 0; i < num; i++) {
+			String removed = JOptionPane.showInputDialog("Enter Name:")
+					.toLowerCase();
+			Player gone = tempClan.remove(new Player(removed));
+			if (gone == null) {
+				JOptionPane.showMessageDialog(null, "Player Doesn't Exist");
+				i--;
+			}
+		}
+		ArrayList<Player> sortClan = clan.getList();
+		String text = "";
+		rankComp ranksort = new rankComp();
+		Collections.sort(sortClan, ranksort);
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Clan tempClan = clan;
+					rankEditor rankEdit = new rankEditor(save, saveList, sortedClan, tempClan);
+					rankEdit.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		currWar = new war(tempClan.getMembers().toArray(new Player[1]));
+		currWar.resetPlayers();
+		addWarSave();
+		saveList.set(0, "" + (Integer.parseInt(saveList.get(0)) + 1));
+		save.saveFile(saveList);
+		currentWarNumber++;
+		txtrHelloMyName.setText("War: " + currentWarNumber + "\n"
+				+ currWar.toString() + "\n" + topAttackers());
+		currentWarNumber = Integer.parseInt(saveList.get(0));
+		txtrHelloMyName.setCaretPosition(0);
+
+	}
+
+	private static void addWarSave() {
+		int pointer = saveList.lastIndexOf("war" + saveList.get(0) + "End");
+		pointer++;
+		saveList.add(pointer, "");
+		pointer++;
+		saveList.add(pointer, "war" + (Integer.parseInt(saveList.get(0)) + 1));
+		for (Object play : currWar) {
+			pointer++;
+			Player p = (Player) play;
+			saveList.add(pointer,
+					p.getName() + " " + p.getThLevel() + " " + p.getStars()
+							+ " " + p.getAttackU() + " " + p.getAttackW());
+		}
+		pointer++;
+		saveList.add(pointer, "war" + (Integer.parseInt(saveList.get(0)) + 1)
+				+ "End");
+	}
+
+	private static void loadPreviousWar() {
+		if (currentWarNumber <= 0) {
+			JOptionPane.showMessageDialog(null, "ALREADY ON EARLIEST WAR");
+		} else {
+			currWar = save.loadWar(currentWarNumber - 1);
+			currentWarNumber--;
+			txtrHelloMyName.setText("War: " + (currentWarNumber + 1) + "\n"
+					+ currWar.toString() + "\n" + topAttackers());
+			txtrHelloMyName.setCaretPosition(0);
+
+		}
+	}
+
+	private static void loadNextWar() {
+		if (currentWarNumber >= Integer.parseInt(saveList.get(0))) {
+			JOptionPane.showMessageDialog(null, "ALREADY ON CURRENT WAR");
+		} else {
+			currWar = save.loadWar(currentWarNumber + 1);
+			currentWarNumber++;
+			txtrHelloMyName.setText("War: " + (currentWarNumber + 1) + "\n"
+					+ currWar.toString() + "\n" + topAttackers());
+			txtrHelloMyName.setCaretPosition(0);
+			topAttackers();
+		}
+	}
+
+	
 	// SWING ACTIONS
 	// -----------------------------------------------------------------------------------------------------------------------------------------------
 	private class SwingAction extends AbstractAction {
@@ -836,7 +876,7 @@ public class mainWindow extends JFrame {
 			String text = "";
 			Collections.sort(sortClan, new playerComp());
 			for (Player play : sortClan) {
-				text = text + play.toString();
+				text = text + play.getName() + "(" + play.getThLevel() + ")\n";
 			}
 
 			JTextArea textArea = new JTextArea(text);
@@ -866,26 +906,49 @@ public class mainWindow extends JFrame {
 	private class SwingAction_13 extends AbstractAction {
 		public SwingAction_13() {
 			putValue(NAME, "War Ranks");
-			putValue(SHORT_DESCRIPTION, "Not set up yet");
+			putValue(SHORT_DESCRIPTION, "Edit/View War Ranks");
 		}
 
 		public void actionPerformed(ActionEvent e) {
 			ArrayList<Player> sortClan = clan.getList();
 			String text = "";
-			Collections.sort(sortClan, new rankComp());
-			for (Player play : sortClan) {
-				text = text + play.getRank() + ") " + play.toString();
-			}
-			JTextArea textArea = new JTextArea(text);
-			Font font = new Font("Verdana", Font.BOLD, 20);
-			textArea.setFont(font);
-			textArea.setEditable(false);
-			JScrollPane scrollPane = new JScrollPane(textArea);
-			textArea.setLineWrap(true);
-			textArea.setWrapStyleWord(true);
-			scrollPane.setPreferredSize(new Dimension(500, 500));
-			JOptionPane.showMessageDialog(null, scrollPane,
-					"dialog test with textarea", JOptionPane.YES_NO_OPTION);
+			rankComp ranksort = new rankComp();
+			Collections.sort(sortClan, ranksort);
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						Clan tempClan = clan;
+						rankEditor rankEdit = new rankEditor(save, saveList, sortedClan, tempClan);
+						rankEdit.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+//			ArrayList<Player> sortClan = clan.getList();
+//			String text = "";
+//			Collections.sort(sortClan, new rankComp());
+//			for (Player play : sortClan) {
+//				text = text + play.getRank() + ") " + play.toString();
+//			}
+//			JTextArea textArea = new JTextArea(text);
+//			JButton butt = new JButton("Edit War Ranks");
+//			butt.addActionListener(new editRanks());
+//			Font font = new Font("Verdana", Font.BOLD, 20);
+//			textArea.setFont(font);
+//			textArea.setEditable(false);
+//			JPanel pane = new JPanel();
+//			JScrollPane scrollPane = new JScrollPane(textArea);
+//			textArea.setLineWrap(true);
+//			textArea.setWrapStyleWord(true);
+//			scrollPane.setPreferredSize(new Dimension(500, 500));
+//			pane.setLayout(new FlowLayout());
+//			
+//			pane.add(scrollPane);
+//			pane.add(butt);
+//			butt.setSize(new Dimension(20, 5));
+//			JOptionPane.showMessageDialog(null, pane,
+//					"dialog test with textarea", JOptionPane.YES_NO_OPTION);
 		}
 	}
 
@@ -899,17 +962,30 @@ public class mainWindow extends JFrame {
 		}
 
 	}
-	private class rankComp implements Comparator {
+	
+	private class editRanks implements ActionListener {
 
 		@Override
-		public int compare(Object a0, Object a1) {
-			Player p1 = (Player) a0;
-			Player p2 = (Player) a1;
-			return p1.getRank() - p2.getRank();
+		public void actionPerformed(ActionEvent e) {
+			ArrayList<Player> sortClan = clan.getList();
+			String text = "";
+			rankComp ranksort = new rankComp();
+			Collections.sort(sortClan, ranksort);
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						Clan tempClan = clan;
+						rankEditor rankEdit = new rankEditor(save, saveList, sortedClan, tempClan);
+						rankEdit.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
 		}
-
+		
 	}
-
 
 	private class SwingAction_14 extends AbstractAction {
 		public SwingAction_14() {
@@ -923,7 +999,7 @@ public class mainWindow extends JFrame {
 			Collections.sort(sortClan);
 			int i = 1;
 			for (Player play : sortClan) {
-				text = text + i + ") " + play.toString();
+				text = text + i + ") " + play.getName() + "(" + play.getWorth() + ")\n";
 				i++;
 			}
 

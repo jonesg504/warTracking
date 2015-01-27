@@ -7,7 +7,7 @@ public class war extends Clan {
 	private int attacksWon = 0;
 	private int attacksUsed = 0;
 	private int warNum = 0;
-	private ArrayList<Player> players = new ArrayList(50);
+	private ArrayList<Player> players = new ArrayList<Player>(50);
 	public war (Player...players) {
 		super(players);
 	}
