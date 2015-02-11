@@ -20,6 +20,7 @@ public class Clan implements Iterable{
 	public ArrayList<Player> getMembers() {
 		return players;
 	}
+	
 	public String printWar() {
 		String warString = "";
 		for (int i = 0; i < players.size(); i++) {
@@ -49,6 +50,10 @@ public class Clan implements Iterable{
 		
 		return null;
 	}
+	public Clan copy() {
+		Clan copy = this;
+		return copy;
+	}
 	public void add(Player player) {
 		players.add(player);
 	}
@@ -64,7 +69,6 @@ public class Clan implements Iterable{
 		public boolean hasNext() {
 			return (current < players.size() && players.get(current) != null);
 		}
-
 		@Override
 		public Player next() {
 			Player returnVal = null;
@@ -83,5 +87,9 @@ public class Clan implements Iterable{
 			
 		}
 		
+	}
+
+	public boolean doesExist(Player play) {
+		return players.contains(play);
 	}
 }

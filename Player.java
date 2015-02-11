@@ -9,6 +9,7 @@ public class Player implements Comparable{
 	private int attackU = 0;
 	private int attackW = 0;
 	private int rank; 
+	private int numWars = 0;
 	public Player (String name, int stars, int thLevel) {
 		this.name = name.toLowerCase();
 		this.stars = stars;
@@ -90,11 +91,17 @@ public class Player implements Comparable{
 	public void addAttackW() {
 		this.attackW++;
 	}
+	public void removeWorth(double worth2) {
+		worth-= worth2;
+	}
 	public int getAttackU() {
 		return attackU;
 	}
 	public void addAttackU() {
 		this.attackU++;
+	}
+	public void addWar() {
+		numWars++;
 	}
 	public void setAttackU(int num) {
 		this.attackU = num;
@@ -111,8 +118,15 @@ public class Player implements Comparable{
 	@Override
 	public int compareTo(Object o) {
 		Player other = (Player) o;
-		return (int) (other.getWorth() - this.getWorth());
-			
+		if(other.getNumWars() != 0 && this.getNumWars() != 0) {
+			return (int) (other.getWorth()/other.getNumWars() - this.getWorth()/this.getNumWars());
+		} else  if(other.getNumWars() == 0 && this.getNumWars() == 0) {
+			return 0;
+		} else if(this.getNumWars() == 0) {
+			return 1;
+		} else {
+			return -1;
+		}
 		
 	}
 	public int getRank() {
@@ -120,6 +134,12 @@ public class Player implements Comparable{
 	}
 	public void setRank(int rank) {
 		this.rank = rank;
+	}
+	public int getNumWars() {
+		return numWars;
+	}
+	public void setNumWars(int numWars) {
+		this.numWars = numWars;
 	}
 	
 	

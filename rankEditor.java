@@ -50,9 +50,7 @@ public class rankEditor extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public rankEditor(FileHandle save, ArrayList<String> saveList, ArrayList<Player> edit, Clan clan) {
-		this.save = save;
-		this.saveList = saveList;
+	public rankEditor(ArrayList<Player> edit, Clan clan) {
 		this.edit = edit;
 		this.clan = clan;
 		dontEdit = clan;
